@@ -61,6 +61,26 @@ Deno.serve(async (req) => {
       // La continuidad se controla por cantidad de gestores activos, no por exigir un owner permanente.
     };
 
+    const writeAudit = async (action: string, target: any, beforeData: any = null, afterData: any = null, reason: string | null = null) => {
+      try {
+        await admin.from("audit_logs").insert({
+          organization_id: organizationId,
+          destination_id: afterData?.destination_id || beforeData?.destination_id || null,
+          actor_user_id: user.id,
+          actor_email: user.email || null,
+          entity_type: "user",
+          entity_id: target?.user_id || target?.id || null,
+          action,
+          reason,
+          before_data: beforeData,
+          after_data: afterData,
+          metadata: {},
+        });
+      } catch (auditError) {
+        console.warn("Audit warning", auditError);
+      }
+    };
+
     const getTarget = async (userId: string) => {
       const { data, error } = await admin
         .from("organization_members")
@@ -138,6 +158,7 @@ Deno.serve(async (req) => {
         .select()
         .single();
       if (membershipError) throw new Error(membershipError.message);
+      await writeAudit("user_invite", membership, null, membership, "Alta o invitación de usuario");
       return json({ membership, existing_auth_user: !!authUser.last_sign_in_at });
     }
 
@@ -167,6 +188,7 @@ Deno.serve(async (req) => {
         .select()
         .single();
       if (error) throw new Error(error.message);
+      await writeAudit("user_update", membership, target, membership, String(body.reason || "Edición de usuario"));
       return json({ membership });
     }
 
@@ -184,6 +206,7 @@ Deno.serve(async (req) => {
         .select()
         .single();
       if (error) throw new Error(error.message);
+      await writeAudit("user_status", membership, target, membership, status === "active" ? "Usuario habilitado" : "Usuario deshabilitado");
       return json({ membership });
     }
 
@@ -192,6 +215,8 @@ Deno.serve(async (req) => {
       if (userId === user.id) return json({ error: "No podés eliminar tu propio usuario" }, 400);
       const target = await getTarget(userId);
       await ensureManagerContinuity(target, undefined, undefined, true);
+
+      await writeAudit("user_delete", target, target, null, String(body.reason || "Eliminación de usuario"));
 
       const { error: deleteMembershipError } = await admin
         .from("organization_members")

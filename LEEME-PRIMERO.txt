@@ -1,29 +1,29 @@
-DESTINTELLIGENCE V5.7 · JUNÍN DE LOS ANDES
+DESTINTELLIGENCE V5.8 · GESTIÓN Y AUDITORÍA
+===========================================
 
-SI YA TENÉS V5.6 FUNCIONANDO:
+SI YA TENÉS V5.7 FUNCIONANDO:
+1. Ejecutá ACTUALIZAR-GESTION-AUDITORIA-V5.8.sql en Supabase > SQL Editor.
+2. Volvé a desplegar la función admin-users.
+3. Reemplazá los archivos de GitHub por los de V5.8.
+4. Esperá GitHub Pages y hacé Ctrl + F5.
 
-1. Subí a GitHub los archivos de esta carpeta reemplazando los anteriores.
-2. En Supabase > SQL Editor ejecutá UNA VEZ:
-   ACTUALIZAR-PERMISOS-V5.7.sql
-3. Volvé a desplegar la Edge Function admin-users ejecutando:
-   DESPLEGAR-FUNCION-USUARIOS.ps1
-   o los comandos indicados en README.md.
-4. Hacé Ctrl + F5 en el navegador.
+NO ejecutes nuevamente SUPABASE-INSTALACION-COMPLETA.sql sobre una base ya funcionando.
 
-NO vuelvas a ejecutar SUPABASE-INSTALACION-COMPLETA.sql sobre tu base actual.
-Ese archivo es únicamente para instalaciones nuevas.
+SI ES UNA INSTALACIÓN NUEVA:
+Ejecutá solamente SUPABASE-INSTALACION-COMPLETA.sql.
 
-CAMBIOS PRINCIPALES V5.7:
-- Corrección del guardado/verificación al editar usuarios.
-- Responsable principal puede pasar a Administrador.
-- Se exige al menos un Responsable o Admin activo, no un Owner permanente.
-- Cambio Encuestador -> Analista queda persistido y verificado contra Supabase.
-- Encuestador tiene acceso reducido: Inicio + Registrar entrevista.
-- RLS limita al Encuestador a sus propias entrevistas/eventos.
-- Título del navegador: Destintelligence.
-- Encabezados del formulario conservados como:
-  1. Quién es (Filtro y perfil)
-  2. Su viaje (Viaje y consumo)
-  3. Qué le pareció (Experiencia)
-  4. Qué le faltó (Oportunidades)
-  5. Finalizar (Adicionales)
+La URL y la publishable key de tu proyecto ya están en config.js.
+
+NUEVO: GESTIÓN DE DATOS
+- Abrir y corregir entrevistas individuales.
+- Encuestadores: sólo pueden corregir entrevistas propias y deben indicar motivo.
+- Seleccionar una, varias o todas las entrevistas filtradas.
+- Descargar CSV, Excel y PDF.
+- Editar, archivar, reactivar, respaldar y eliminar estudios.
+- Eliminar preguntas personalizadas con confirmación fuerte.
+- Historial con usuario, fecha/hora, motivo y antes/después.
+- Backup completo de la organización.
+
+SEGURIDAD DE BORRADO:
+Toda eliminación definitiva exige un motivo y escribir exactamente ELIMINAR.
+Archivar es preferible a eliminar un estudio terminado.

@@ -1,0 +1,55 @@
+DESTINTELLIGENCE V5.8 · ACTUALIZACIÓN DESDE V5.7
+==================================================
+
+Esta actualización NO requiere reinstalar la base.
+No ejecutes SUPABASE-INSTALACION-COMPLETA.sql si tu proyecto ya está funcionando.
+
+PASO 1 · SUPABASE
+-----------------
+En Supabase > SQL Editor ejecutá UNA sola vez:
+
+ACTUALIZAR-GESTION-AUDITORIA-V5.8.sql
+
+Este archivo:
+- crea el historial de auditoría;
+- habilita correcciones controladas de entrevistas;
+- agrega trazabilidad a estudios y preguntas;
+- crea eliminación segura mediante RPC;
+- mantiene los datos existentes.
+
+PASO 2 · EDGE FUNCTION DE USUARIOS
+----------------------------------
+Volvé a desplegar admin-users porque V5.8 registra también las altas, ediciones,
+habilitaciones, bajas y eliminaciones de usuarios en el historial.
+
+Desde una terminal abierta en la carpeta del proyecto:
+
+npx supabase login
+npx supabase link --project-ref dnnlbqnppxlmstneawrw
+npx supabase functions deploy admin-users --no-verify-jwt
+
+También podés usar DESPLEGAR-FUNCION-USUARIOS.ps1.
+
+PASO 3 · GITHUB PAGES
+---------------------
+Reemplazá los archivos de la versión anterior por los de V5.8.
+El config.js YA contiene la URL y la publishable key indicadas para este proyecto.
+
+Después de que GitHub Pages termine el deploy, usá Ctrl + F5.
+
+NUEVO EN V5.8
+-------------
+- Gestión de estudios: editar, archivar/reactivar, backup y eliminación segura.
+- Gestión de entrevistas/cuestionarios: ver, corregir, seleccionar y exportar.
+- Encuestador: puede corregir solamente entrevistas propias y debe indicar motivo.
+- Historial: usuario, fecha/hora, acción, motivo, antes y después.
+- CSV, Excel y PDF para una, varias o todas las entrevistas seleccionadas.
+- Backup completo JSON de la organización.
+- Eliminación irreversible protegida por motivo + palabra ELIMINAR.
+- Auditoría de gestión de usuarios mediante la Edge Function.
+
+IMPORTANTE
+----------
+Antes de una eliminación masiva, descargá un backup completo.
+Archivar un estudio NO elimina datos. Es la opción recomendada cuando una temporada
+terminó o el estudio ya no debe usarse para nuevas entrevistas.

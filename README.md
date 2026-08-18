@@ -1,40 +1,113 @@
-# Destintelligence V5.7 · Junín de los Andes
+# Destintelligence V5.8 · Gestión, auditoría y backups
 
-Versión enfocada en facilidad de uso, gestión de usuarios y separación real de permisos.
+Aplicación de inteligencia turística para equipos municipales. Mantiene la operación diaria simple, pero agrega una capa institucional de gestión: estudios, entrevistas, trazabilidad, exportaciones y respaldos.
 
-## Roles
+## Supabase ya conectado
 
-- **Responsable principal:** acceso total.
-- **Administrador:** acceso total operativo y gestión de usuarios.
-- **Analista:** estudios, cuestionarios, calidad, resultados, oportunidades, segmentos, importación, informes y publicación. No administra usuarios ni marca.
-- **Encuestador:** Inicio + Registrar entrevista. No accede a resultados ni administración. En Supabase sólo puede leer las entrevistas/eventos que él mismo cargó.
+`config.js` ya contiene el proyecto solicitado:
 
-## Gestión de usuarios
+- Project ref: `dnnlbqnppxlmstneawrw`
+- URL: `https://dnnlbqnppxlmstneawrw.supabase.co`
+- Publishable key configurada
 
-La pantalla Usuarios permite crear/invitar, editar, cambiar rol, habilitar/deshabilitar y eliminar accesos.
+La publishable key es pública y puede estar en el frontend. **Nunca coloques la `service_role` en GitHub, `config.js` ni ningún archivo del navegador.**
 
-V5.7 permite pasar un Responsable principal a Administrador. La regla de seguridad ya no exige conservar un Owner: exige que quede al menos un **Responsable principal o Administrador activo**.
+## Si ya tenés V5.7 funcionando
 
-Las operaciones Auth se realizan con la Edge Function `admin-users`; la `service_role` nunca se expone en el navegador.
+No reinstales la base.
 
-## Actualizar una instalación V5.6 existente
+1. En **Supabase → SQL Editor**, ejecutá una vez `ACTUALIZAR-GESTION-AUDITORIA-V5.8.sql`.
+2. Volvé a desplegar `admin-users` para que la administración de usuarios también escriba en el historial.
+3. Reemplazá en GitHub los archivos anteriores por esta versión.
+4. Esperá el deploy de GitHub Pages y hacé `Ctrl + F5`.
 
-1. Reemplazar en GitHub los archivos de la app por los de V5.7.
-2. Ejecutar **ACTUALIZAR-PERMISOS-V5.7.sql** una sola vez en Supabase > SQL Editor.
-3. Volver a desplegar la Edge Function:
+## Si instalás desde cero
 
-```powershell
+Ejecutá solamente:
+
+`SUPABASE-INSTALACION-COMPLETA.sql`
+
+No hace falta ejecutar migraciones anteriores.
+
+## Gestión de datos
+
+### Entrevistas / cuestionarios cargados
+
+Responsable principal, Administrador y Analista pueden:
+
+- abrir una entrevista individual;
+- editarla indicando obligatoriamente el motivo;
+- seleccionar una, varias, una página o todos los resultados filtrados;
+- exportar la selección en CSV, Excel o PDF;
+- eliminar definitivamente una selección mediante motivo + palabra `ELIMINAR`.
+
+El Encuestador dispone de **Mis entrevistas** y puede abrir y corregir únicamente registros creados por él. Toda corrección exige motivo y deja trazabilidad.
+
+### Estudios
+
+Responsable principal, Administrador y Analista pueden:
+
+- editar metodología, nombre, período y parámetros;
+- archivar y reactivar;
+- ver sus entrevistas;
+- descargar un respaldo del estudio;
+- seleccionar varios estudios;
+- eliminar definitivamente con confirmación fuerte.
+
+Archivar conserva todos los datos y es la opción recomendada cuando termina una temporada.
+
+### Preguntas
+
+La gestión de cuestionario mantiene editar, reordenar, duplicar, ocultar/restaurar y agrega eliminación definitiva de preguntas personalizadas. Los cambios quedan auditados.
+
+### Historial
+
+Registra, entre otros:
+
+- usuario;
+- correo;
+- fecha y hora;
+- acción;
+- entidad afectada;
+- motivo;
+- información anterior y posterior.
+
+Incluye entrevistas, estudios, preguntas, usuarios, cobertura, eventos de campo, marca, publicaciones, exportaciones y backups.
+
+### Backups
+
+**Backup completo** descarga un JSON con la información de la organización: estudios, preguntas, entrevistas, eventos, cobertura, usuarios, marca, publicaciones e historial.
+
+Recomendación: hacer un backup al cerrar una temporada y antes de cualquier eliminación masiva.
+
+## Edge Function de usuarios
+
+La gestión de Supabase Auth se realiza mediante:
+
+`supabase/functions/admin-users/index.ts`
+
+Para desplegarla desde una terminal en esta carpeta:
+
+```bash
 npx supabase login
 npx supabase link --project-ref dnnlbqnppxlmstneawrw
 npx supabase functions deploy admin-users --no-verify-jwt
 ```
 
-También se incluye `DESPLEGAR-FUNCION-USUARIOS.ps1`.
+También está `DESPLEGAR-FUNCION-USUARIOS.ps1` para Windows.
 
-## Instalación nueva
+## Recuperación de contraseña
 
-Ejecutar únicamente `SUPABASE-INSTALACION-COMPLETA.sql` y desplegar `admin-users`.
+En **Supabase → Authentication → URL Configuration** usá:
 
-## Supabase configurado
+- Site URL: `https://sebastian-ed.github.io/destintelligence/`
+- Redirect URL: `https://sebastian-ed.github.io/destintelligence/`
 
-`config.js` ya contiene la URL y publishable key pública del proyecto proporcionado para esta instalación.
+## Exportaciones
+
+- **CSV:** preparado para abrir correctamente en Excel con configuración regional que usa `;` como separador.
+- **Excel:** hoja de entrevistas + hoja de información del exportable.
+- **PDF:** ficha detallada para una entrevista y documento tabular paginado para múltiples entrevistas.
+- **JSON:** estudios y backups completos.
+
+Las librerías de Excel/PDF se cargan desde CDN; si no estuvieran disponibles, la app conserva alternativas de exportación cuando es posible.
