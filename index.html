@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#315d4d">
-  <title>Destintelligence V5.3 Simple · Junín de los Andes</title>
+  <title>Destintelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -26,6 +26,7 @@
         <input id="loginPassword" class="form-control form-control-lg" type="password" placeholder="Contraseña" required>
         <button class="btn btn-primary btn-lg">Ingresar</button>
         <button id="demoBtn" class="btn btn-outline-secondary btn-lg" type="button">Abrir demo Junín de los Andes</button>
+        <button id="forgotPasswordBtn" class="btn btn-link login-recovery-link" type="button">¿Olvidaste tu contraseña?</button>
       </form>
     </div>
   </div>
@@ -276,11 +277,11 @@
     <div id="questionnaireEditBanner" class="edit-preview-banner d-none"><div><strong>Modo edición</strong><span>Este es el mismo cuestionario que usa el encuestador. Tocá <b>Editar</b> al lado de cualquier pregunta para modificarla.</span></div><button type="button" class="btn btn-sm btn-outline-secondary" id="previewAddQuestionBtn">+ Agregar pregunta</button></div>
     <div id="interviewerGuide" class="interviewer-guide"><div><strong>Es simple</strong><span>Leé cada pregunta y marcá lo que responda la persona. Si no sabe una respuesta opcional, dejala vacía.</span></div><button type="button" class="btn btn-sm btn-outline-secondary" id="surveyOptionalToggle">Ocultar preguntas opcionales</button></div>
     <ul class="nav nav-pills survey-tabs mb-4" id="surveyTabs" role="tablist">
-      <li class="nav-item"><button class="nav-link active" type="button" data-bs-toggle="pill" data-bs-target="#survey-context">1. Quién es (Filtro y perfil)</button></li>
-      <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-journey">2. Su viaje (Viaje y consumo)</button></li>
-      <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-experience">3. Qué le pareció (Experiencia)</button></li>
-      <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-opportunity">4. Qué le faltó (Oportunidades)</button></li>
-      <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-extra">5. Preguntas adicionales</button></li>
+      <li class="nav-item"><button class="nav-link active" type="button" data-bs-toggle="pill" data-bs-target="#survey-context">1. Quién es</button></li>
+      <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-journey">2. Su viaje</button></li>
+      <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-experience">3. Qué le pareció</button></li>
+      <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-opportunity">4. Qué le faltó</button></li>
+      <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-extra">5. Finalizar</button></li>
     </ul>
     <div class="tab-content">
       <div class="tab-pane fade show active" id="survey-context">
@@ -406,10 +407,43 @@
 <!-- USER MODAL -->
 <div class="modal fade" id="userModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="userForm"><div class="modal-header"><h3 class="modal-title">Agregar usuario</h3><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input id="newUserName" class="form-control mb-3" placeholder="Nombre" required><input id="newUserEmail" type="email" class="form-control mb-3" placeholder="Correo" required><select id="newUserRole" class="form-select mb-3"><option value="admin">Administrador</option><option value="analyst">Analista</option><option value="field">Encuestador</option></select><select id="newUserDestination" class="form-select"></select><div class="method-note mt-3">En producción esta acción invoca la Edge Function <code>admin-users</code>. La service_role nunca se expone en el navegador.</div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Crear / invitar</button></div></form></div></div></div>
 
+<!-- PASSWORD RECOVERY MODALS -->
+<div class="modal fade" id="passwordResetRequestModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+    <form id="passwordResetRequestForm">
+      <div class="modal-header"><div><span class="eyebrow">Acceso</span><h3 class="modal-title">Recuperar contraseña</h3></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button></div>
+      <div class="modal-body">
+        <p class="text-secondary">Ingresá el correo de tu usuario. Te enviaremos un enlace para elegir una nueva contraseña.</p>
+        <label class="form-label" for="passwordResetEmail">Correo electrónico</label>
+        <input id="passwordResetEmail" type="email" class="form-control form-control-lg" placeholder="turismo@municipio.gob.ar" required autocomplete="email">
+        <div class="method-note mt-3">Por seguridad, el sistema no informa si el correo existe o no.</div>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" type="submit">Enviar enlace</button></div>
+    </form>
+  </div></div>
+</div>
+
+<div class="modal fade" id="passwordUpdateModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+    <form id="passwordUpdateForm">
+      <div class="modal-header"><div><span class="eyebrow">Acceso</span><h3 class="modal-title">Elegir nueva contraseña</h3></div></div>
+      <div class="modal-body">
+        <p class="text-secondary">El enlace fue validado. Creá una nueva contraseña para tu cuenta.</p>
+        <label class="form-label" for="newPassword">Nueva contraseña</label>
+        <input id="newPassword" type="password" class="form-control form-control-lg mb-3" minlength="8" required autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+        <label class="form-label" for="newPasswordConfirm">Repetir contraseña</label>
+        <input id="newPasswordConfirm" type="password" class="form-control form-control-lg" minlength="8" required autocomplete="new-password">
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary" type="submit">Guardar nueva contraseña</button></div>
+    </form>
+  </div></div>
+</div>
+
 <script src="vendor/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
 <script src="vendor/chart-fallback.js"></script>
+<script src="config.js?v=5.4.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js"></script>
+<script src="app.js?v=5.4.0"></script>
 </body>
 </html>

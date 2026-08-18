@@ -1,4 +1,4 @@
-# Destintelligence V5.3 Simple · Junín de los Andes
+# Destintelligence V5.4 Simple · Junín de los Andes
 
 Aplicación de inteligencia turística orientada a equipos municipales. La interfaz prioriza tres tareas: crear/preparar un estudio, registrar entrevistas y ver resultados. La metodología, los controles de calidad, la edición del cuestionario, la importación histórica, la segmentación y los hallazgos automáticos siguen disponibles sin recargar la operación diaria.
 
@@ -16,7 +16,7 @@ No uses migraciones antiguas. Esta versión incluye únicamente:
 
 `SUPABASE-INSTALACION-COMPLETA.sql`
 
-Ese archivo ya contiene el esquema final de Destintelligence V5.3, incluidas las variables agregadas en V5.2.
+Ese archivo ya contiene el esquema final de Destintelligence V5.4, incluidas las variables agregadas en V5.2.
 
 ### Paso 1 · Crear el primer usuario
 
@@ -72,3 +72,17 @@ Esta instalación nueva NO requiere:
 - migración V5.1 → V5.2
 
 Todo quedó consolidado en `SUPABASE-INSTALACION-COMPLETA.sql`.
+
+
+## V5.4 · conexión y recuperación de contraseña
+
+`index.html` y `public.html` cargan `config.js` automáticamente antes de iniciar Supabase. En versiones anteriores el archivo existía pero no era incluido por la página, por lo que la app podía mostrar el aviso de configuración aun con credenciales correctas.
+
+Para GitHub Pages, después de publicar la app, configurá en Supabase **Authentication → URL Configuration**:
+
+- **Site URL:** `https://TU-USUARIO.github.io/TU-REPOSITORIO/`
+- **Redirect URLs:** agregá exactamente la misma URL.
+
+En este proyecto, si el repositorio se llama `destintelligence`, el formato será `https://TU-USUARIO.github.io/destintelligence/`.
+
+La recuperación funciona así: el usuario toca **¿Olvidaste tu contraseña?**, escribe su correo, Supabase envía el email, el enlace vuelve a la app y Destintelligence muestra el formulario para elegir una nueva contraseña.

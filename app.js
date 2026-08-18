@@ -1,7 +1,58 @@
-const SUPABASE_URL=window.DESTINTELLIGENCE_CONFIG?.SUPABASE_URL||"https://TU-PROYECTO.supabase.co";
-const SUPABASE_ANON_KEY=window.DESTINTELLIGENCE_CONFIG?.SUPABASE_ANON_KEY||"TU-ANON-KEY";
-const CONFIGURED=!SUPABASE_URL.includes("TU-PROYECTO")&&!SUPABASE_ANON_KEY.includes("TU-ANON");
-const sb=CONFIGURED?supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+const DEST_CONFIG=window.DESTINTELLIGENCE_CONFIG||{};
+const SUPABASE_URL=String(DEST_CONFIG.SUPABASE_URL||window.DESTINTELLIGENCE_SUPABASE_URL||"").trim();
+const SUPABASE_ANON_KEY=String(DEST_CONFIG.SUPABASE_ANON_KEY||DEST_CONFIG.SUPABASE_PUBLISHABLE_KEY||window.DESTINTELLIGENCE_SUPABASE_KEY||"").trim();
+function validSupabaseConfig(){
+ try{
+  const u=new URL(SUPABASE_URL);
+  return ["http:","https:"].includes(u.protocol)&&!!u.hostname&&SUPABASE_ANON_KEY.length>20&&!SUPABASE_URL.includes("TU-PROYECTO")&&!SUPABASE_ANON_KEY.includes("TU-ANON")&&!SUPABASE_ANON_KEY.includes("PUBLISHABLE-KEY");
+ }catch{return false}
+}
+const CONFIGURED=validSupabaseConfig();
+const sb=CONFIGURED?supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}}):null;
+let passwordRecoveryMode=false;
+function hasPasswordRecoveryParams(){
+ const hash=location.hash||"",q=new URLSearchParams(location.search);
+ return hash.includes("type=recovery")||q.get("type")==="recovery"||hash.includes("access_token=")&&hash.includes("refresh_token=");
+}
+function passwordRecoveryRedirectUrl(){
+ const u=new URL(location.href);u.hash="";u.search="";return u.toString();
+}
+function openPasswordResetRequest(){
+ if(!CONFIGURED){toast("Supabase todavía no está conectado. Revisá config.js.","warning");return}
+ const email=$("loginEmail")?.value?.trim()||"";if($("passwordResetEmail"))$("passwordResetEmail").value=email;
+ bootstrap.Modal.getOrCreateInstance($("passwordResetRequestModal")).show();
+}
+async function requestPasswordReset(e){
+ e.preventDefault();if(!CONFIGURED)return toast("Supabase todavía no está conectado. Revisá config.js.","warning");
+ const email=$("passwordResetEmail").value.trim();if(!email)return;
+ const submit=e.submitter;if(submit){submit.disabled=true;submit.textContent="Enviando…"}
+ const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:passwordRecoveryRedirectUrl()});
+ if(submit){submit.disabled=false;submit.textContent="Enviar enlace"}
+ if(error){toast(`No se pudo enviar el correo: ${error.message}`,"danger");return}
+ bootstrap.Modal.getInstance($("passwordResetRequestModal"))?.hide();
+ toast("Si el correo pertenece a una cuenta, vas a recibir un enlace para cambiar la contraseña.","success");
+}
+function showPasswordUpdate(){
+ passwordRecoveryMode=true;$("loginView")?.classList.remove("d-none");$("appView")?.classList.add("d-none");
+ setTimeout(()=>bootstrap.Modal.getOrCreateInstance($("passwordUpdateModal")).show(),0);
+}
+async function updateRecoveredPassword(e){
+ e.preventDefault();const pass=$("newPassword").value,confirm=$("newPasswordConfirm").value;
+ if(pass.length<8)return toast("La nueva contraseña debe tener al menos 8 caracteres.","warning");
+ if(pass!==confirm)return toast("Las dos contraseñas no coinciden.","warning");
+ const submit=e.submitter;if(submit){submit.disabled=true;submit.textContent="Guardando…"}
+ const {error}=await sb.auth.updateUser({password:pass});
+ if(submit){submit.disabled=false;submit.textContent="Guardar nueva contraseña"}
+ if(error){toast(`No se pudo actualizar la contraseña: ${error.message}`,"danger");return}
+ bootstrap.Modal.getInstance($("passwordUpdateModal"))?.hide();
+ await sb.auth.signOut();passwordRecoveryMode=false;
+ history.replaceState({},document.title,location.pathname);
+ $("newPassword").value="";$("newPasswordConfirm").value="";
+ toast("Contraseña actualizada. Ya podés ingresar con la nueva contraseña.","success");
+}
+if(sb){
+ sb.auth.onAuthStateChange((event)=>{if(event==="PASSWORD_RECOVERY")showPasswordUpdate()});
+}
 const $=id=>document.getElementById(id),qsa=s=>[...document.querySelectorAll(s)],uid=()=>globalThis.crypto?.randomUUID?.()||`id-${Date.now()}-${Math.random().toString(16).slice(2)}-${Math.random().toString(16).slice(2)}`;
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 const fmt=(x,d=0)=>x===null||x===undefined||Number.isNaN(Number(x))?"—":new Intl.NumberFormat("es-AR",{maximumFractionDigits:d}).format(Number(x));
@@ -92,7 +143,7 @@ function applyLoaded(x){Object.assign(state,x);state.charts={};state.gps=null}
 
 async function init(){buildStaticInputs();bind();if(CONFIGURED){const{data:{session}}=await sb.auth.getSession();if(session)await enterProd(session.user)}updateSampleCalc()}
 function bind(){
- $("loginForm").addEventListener("submit",login);$("demoBtn").addEventListener("click",enterDemo);$("logoutBtn").addEventListener("click",logout);$("menuBtn").addEventListener("click",()=>$("sidebar").classList.toggle("open"));
+ $("loginForm").addEventListener("submit",login);$("demoBtn").addEventListener("click",enterDemo);$("forgotPasswordBtn")?.addEventListener("click",openPasswordResetRequest);$("passwordResetRequestForm")?.addEventListener("submit",requestPasswordReset);$("passwordUpdateForm")?.addEventListener("submit",updateRecoveredPassword);$("logoutBtn").addEventListener("click",logout);$("menuBtn").addEventListener("click",()=>$("sidebar").classList.toggle("open"));
  qsa("[data-view]").forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.view)));qsa("[data-modal]").forEach(b=>b.addEventListener("click",()=>openModal(b.dataset.modal)));
  $("destinationSwitcher").addEventListener("change",e=>{state.destinationId=e.target.value;state.activeStudyId=destinationStudies()[0]?.id||null;renderAll();saveDemo()});
  $("activeStudySelect").addEventListener("change",e=>{state.activeStudyId=e.target.value;renderAll();saveDemo()});
@@ -498,7 +549,10 @@ function init(){
  try{bind()}catch(err){console.error("Error conectando controles generales",err);const demo=$("demoBtn");if(demo&&!demo.dataset.fallbackBound){demo.dataset.fallbackBound="1";demo.addEventListener("click",enterDemo)}}
  try{v43Init()}catch(err){console.error("Error iniciando mejoras V4.3",err)}
  try{bindQuestionnaireBuilder()}catch(err){console.error("Error iniciando editor de cuestionario",err)}
- if(CONFIGURED){sb.auth.getSession().then(async({data:{session}})=>{if(session)await enterProd(session.user)}).catch(err=>console.error("Error recuperando sesión",err));}
+ if(CONFIGURED){sb.auth.getSession().then(async({data:{session}})=>{
+  if(hasPasswordRecoveryParams()&&session){showPasswordUpdate();return}
+  if(session&&!passwordRecoveryMode)await enterProd(session.user)
+ }).catch(err=>console.error("Error recuperando sesión",err));}
  try{updateSampleCalc()}catch(err){console.error("Error actualizando cálculo muestral",err)}
 }
 window.openCoreQuestion=openCoreQuestion;window.openCustomQuestion=openCustomQuestion;window.moveQuestion=moveQuestion;window.duplicateQuestion=duplicateQuestion;window.setQuestionActive=setQuestionActive;
