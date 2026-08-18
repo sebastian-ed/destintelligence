@@ -92,6 +92,23 @@ function studyCoverage(id=state.activeStudyId){return state.coverage.filter(x=>x
 function studyQuestions(id=state.activeStudyId){return state.questions.filter(x=>x.study_id===id).sort((a,b)=>a.position-b.position)}
 function brand(){return state.branding[state.destinationId]||{institution_name:activeDestination()?.name||"Destino",primary_color:"#315d4d",footer:"Información para la toma de decisiones"}}
 function currentMember(){return state.members.find(x=>x.user_id===state.user?.id)||null}
+const ROLE_VIEWS={
+ owner:new Set(["overview","field","studies","forms","demand","opportunities","segments","imports","reports","public","users","branding"]),
+ admin:new Set(["overview","field","studies","forms","demand","opportunities","segments","imports","reports","public","users","branding"]),
+ analyst:new Set(["overview","field","studies","forms","demand","opportunities","segments","imports","reports","public"]),
+ field:new Set(["overview"])
+};
+function currentRole(){return currentMember()?.role||"field"}
+function canView(view){return (ROLE_VIEWS[currentRole()]||ROLE_VIEWS.field).has(view)}
+function canOpenAppModal(id){if(currentRole()!=="field")return true;return id==="surveyModal"}
+function availableDestinations(){const m=currentMember();if(m?.role==="field"&&m.destination_id)return state.destinations.filter(d=>d.id===m.destination_id);return state.destinations}
+function applyRoleAccess(){
+ const role=currentRole(),isField=role==="field";document.body.classList.toggle("role-field",isField);
+ qsa("[data-view]").forEach(el=>{const view=el.dataset.view;if(view)el.classList.toggle("role-hidden",!canView(view))});
+ qsa("[data-modal]").forEach(el=>{const id=el.dataset.modal;if(id)el.classList.toggle("role-hidden",!canOpenAppModal(id))});
+ const adv=document.querySelector(".advanced-nav");if(adv){const any=[...adv.querySelectorAll("[data-view],[data-modal]")].some(el=>!el.classList.contains("role-hidden"));adv.classList.toggle("role-hidden",!any)}
+ const label=document.querySelector("#view-overview .simple-study-strip > div:nth-child(2) > span");if(label)label.textContent=isField?"Tus entrevistas cargadas":"Entrevistas cargadas";
+}
 function rand(a,b){return a+Math.random()*(b-a)}
 function choice(a){return a[Math.floor(Math.random()*a.length)]}
 function weighted(items){const t=items.reduce((s,x)=>s+x[1],0),r=Math.random()*t;let c=0;for(const [v,w] of items){c+=w;if(r<=c)return v}return items[items.length-1][0]}
@@ -200,17 +217,19 @@ async function enterProd(user){state.mode="prod";state.user=user;try{
  }catch(err){toast(err.message,"danger")}}
 async function logout(){if(state.mode==="prod"&&sb)await sb.auth.signOut();try{localStorage.removeItem(DEMO_STORAGE_KEY)}catch{}location.reload()}
 function showApp(){$("loginView").classList.add("d-none");$("appView").classList.remove("d-none");$("modeBadge").textContent=state.mode.toUpperCase();renderAll()}
-function switchView(view){qsa(".app-view").forEach(x=>x.classList.add("d-none"));$(`view-${view}`).classList.remove("d-none");qsa("[data-view]").forEach(x=>x.classList.toggle("active",x.dataset.view===view));$("sidebar").classList.remove("open");if(view==="demand")renderDemand();if(view==="opportunities")renderOpportunities();if(view==="segments")renderSegments();if(view==="field")renderField()}
-function openModal(id){if(id==="surveyModal")prepareSurvey();if(id==="questionModal")populateConditionQuestions();if(id==="coverageModal")$("coveragePoint").value="";bootstrap.Modal.getOrCreateInstance($(id)).show()}
+function switchView(view){if(!canView(view)){toast("Tu rol no tiene acceso a esta sección.","warning");view="overview"}qsa(".app-view").forEach(x=>x.classList.add("d-none"));const target=$(`view-${view}`);if(!target)return;target.classList.remove("d-none");qsa("[data-view]").forEach(x=>x.classList.toggle("active",x.dataset.view===view));$("sidebar").classList.remove("open");if(view==="demand")renderDemand();if(view==="opportunities")renderOpportunities();if(view==="segments")renderSegments();if(view==="field")renderField()}
+function openModal(id){if(!canOpenAppModal(id)){toast("Tu rol no tiene permiso para realizar esta acción.","warning");return}if(id==="surveyModal")prepareSurvey();if(id==="questionModal")populateConditionQuestions();if(id==="coverageModal")$("coveragePoint").value="";bootstrap.Modal.getOrCreateInstance($(id)).show()}
 function closeModal(id){bootstrap.Modal.getOrCreateInstance($(id)).hide()}
 
 function populateSelectors(){
- $("destinationSwitcher").innerHTML=state.destinations.map(d=>`<option value="${d.id}" ${d.id===state.destinationId?"selected":""}>${esc(d.name)}</option>`).join("");
+ const dests=availableDestinations();if(currentRole()==="field"&&currentMember()?.destination_id)state.destinationId=currentMember().destination_id;
+ $("destinationSwitcher").innerHTML=dests.map(d=>`<option value="${d.id}" ${d.id===state.destinationId?"selected":""}>${esc(d.name)}</option>`).join("");
+ $("destinationSwitcher").disabled=currentRole()==="field"||dests.length<=1;
  const studies=destinationStudies(),opts=studies.map(s=>`<option value="${s.id}" ${s.id===state.activeStudyId?"selected":""}>${esc(s.name)}</option>`).join("");
  ["activeStudySelect","demandStudySelect","opportunityStudySelect","segmentStudySelect","reportStudySelect","publicStudySelect"].forEach(id=>{const current=$(id).value;$(id).innerHTML=opts;if(current&&studies.some(s=>s.id===current))$(id).value=current});
  $("newUserDestination").innerHTML=`<option value="">Toda la organización</option>${state.destinations.map(d=>`<option value="${d.id}">${esc(d.name)}</option>`).join("")}`;
 }
-function renderAll(){if(!state.org)return;populateSelectors();$("orgName").textContent=state.org.name;$("orgInfo").textContent=`${state.destinations.length} destino(s) · ${currentMember()?.role||"usuario"}`;renderOverview();renderField();renderStudies();renderQuestions();renderDemand();renderOpportunities();renderSegments();renderUsers();renderBranding();renderPublicStatus()}
+function renderAll(){if(!state.org)return;applyRoleAccess();populateSelectors();$("orgName").textContent=state.org.name;$("orgInfo").textContent=`${availableDestinations().length} destino(s) · ${USER_ROLE_LABELS[currentRole()]||currentRole()}`;renderOverview();if(currentRole()!=="field"){renderField();renderStudies();renderQuestions();renderDemand();renderOpportunities();renderSegments();renderUsers();renderBranding();renderPublicStatus()}}
 function draw(id,type,labels,data,options={}){if(state.charts[id]){try{state.charts[id].destroy()}catch{}}const ctx=$(id);if(!ctx)return;if(typeof globalThis.Chart!=="function"){ctx.style.display="none";const parent=ctx.parentElement;if(parent&&!parent.querySelector(".chart-fallback")){const note=document.createElement("div");note.className="chart-fallback empty";note.textContent="Gráfico no disponible sin conexión. Los datos y el resto de la demo siguen funcionando.";parent.appendChild(note)}return}ctx.style.display="block";state.charts[id]=new Chart(ctx,{type,data:{labels,datasets:[{data,...(options.dataset||{})}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:options.legend??false}},scales:type==="bar"?{y:{beginAtZero:true,grid:{color:"rgba(0,0,0,.04)"}},x:{grid:{display:false}}}:undefined,indexAxis:options.horizontal?"y":"x",...options.chart}})}
 function topCounts(rows,key,n=8){return counts(rows,key).filter(x=>x[0]&&x[0]!=="Sin respuesta").slice(0,n)}
 
@@ -272,28 +291,39 @@ const USER_ROLE_LABELS={owner:"Responsable principal",admin:"Administrador",anal
 const USER_STATUS_LABELS={active:"Activo",disabled:"Deshabilitado",invited:"Invitado"};
 function canManageUsers(){return ["owner","admin"].includes(currentMember()?.role)}
 function userActionAllowed(m){if(!canManageUsers())return false;if(m.user_id===state.user?.id)return true;if(currentMember()?.role==="admin"&&m.role==="owner")return false;return true}
+async function refreshMembersFromServer(){if(state.mode!=="prod")return state.members;const{data,error}=await sb.from("organization_members").select("*").eq("organization_id",state.org.id);if(error)throw new Error(`No se pudieron verificar los cambios de usuarios: ${error.message}`);state.members=data||[];return state.members}
 function renderUsers(){
  const tbody=$("usersTable");if(!tbody)return;const manage=canManageUsers();$("addUserBtn")?.classList.toggle("d-none",!manage);
  tbody.innerHTML=state.members.map(m=>{const self=m.user_id===state.user?.id,allowed=userActionAllowed(m),dest=state.destinations.find(d=>d.id===m.destination_id)?.name||"Toda la organización",status=USER_STATUS_LABELS[m.status]||m.status,role=USER_ROLE_LABELS[m.role]||m.role;let actions="";
   if(manage&&allowed){actions=`<div class="btn-group btn-group-sm" role="group"><button class="btn btn-outline-secondary" type="button" data-user-action="edit" data-user-id="${esc(m.user_id)}">Editar</button>${!self?`<button class="btn btn-outline-secondary" type="button" data-user-action="toggle" data-user-id="${esc(m.user_id)}">${m.status==="disabled"?"Habilitar":"Deshabilitar"}</button><button class="btn btn-outline-danger" type="button" data-user-action="delete" data-user-id="${esc(m.user_id)}">Eliminar</button>`:""}</div>`}
   return`<tr><td><strong>${esc(m.full_name)}</strong>${self?` <span class="badge text-bg-light">Vos</span>`:""}</td><td>${esc(m.email||"—")}</td><td>${esc(role)}</td><td>${esc(dest)}</td><td><span class="badge-status">${esc(status)}</span></td><td class="text-end">${actions||"—"}</td></tr>`}).join("")||`<tr><td colspan="6" class="text-secondary">No hay usuarios cargados.</td></tr>`;
 }
-function prepareNewUser(){if(!canManageUsers()){toast("No tenés permiso para gestionar usuarios.","warning");return}$("userForm").reset();$("editUserId").value="";$("userModalTitle").textContent="Agregar usuario";$("userSubmitBtn").textContent="Crear / invitar";$("userModalHelp").textContent="Si el correo todavía no existe, recibirá una invitación. Si ya tiene una cuenta, se le dará acceso directamente.";$("newUserDestination").value=state.destinationId||"";const ownerOpt=$("newUserRole").querySelector('option[value="owner"]');if(ownerOpt)ownerOpt.disabled=currentMember()?.role!=="owner";$("newUserRole").value="field";openModal("userModal")}
-function prepareEditUser(userId){const m=state.members.find(x=>x.user_id===userId);if(!m||!userActionAllowed(m)){toast("No tenés permiso para editar este usuario.","warning");return}$("editUserId").value=m.user_id;$("newUserName").value=m.full_name||"";$("newUserEmail").value=m.email||"";$("newUserRole").value=m.role;$("newUserDestination").value=m.destination_id||"";$("userModalTitle").textContent="Editar usuario";$("userSubmitBtn").textContent="Guardar cambios";$("userModalHelp").textContent="Podés cambiar nombre, correo, rol y destino. Los cambios de acceso se aplican al guardar.";const ownerOpt=$("newUserRole").querySelector('option[value="owner"]');if(ownerOpt)ownerOpt.disabled=currentMember()?.role!=="owner"&&m.role!=="owner";openModal("userModal")}
+function prepareNewUser(){if(!canManageUsers()){toast("No tenés permiso para gestionar usuarios.","warning");return}$("userForm").reset();$("editUserId").value="";$("userModalTitle").textContent="Agregar usuario";$("userSubmitBtn").textContent="Crear / invitar";$("userModalHelp").textContent="Si el correo todavía no existe, recibirá una invitación. Si ya tiene una cuenta, se le dará acceso directamente.";$("newUserDestination").value=state.destinationId||"";const ownerOpt=$("newUserRole").querySelector('option[value="owner"]');if(ownerOpt)ownerOpt.disabled=!canManageUsers();$("newUserRole").value="field";openModal("userModal")}
+function prepareEditUser(userId){const m=state.members.find(x=>x.user_id===userId);if(!m||!userActionAllowed(m)){toast("No tenés permiso para editar este usuario.","warning");return}$("editUserId").value=m.user_id;$("newUserName").value=m.full_name||"";$("newUserEmail").value=m.email||"";$("newUserRole").value=m.role;$("newUserDestination").value=m.destination_id||"";$("userModalTitle").textContent="Editar usuario";$("userSubmitBtn").textContent="Guardar cambios";$("userModalHelp").textContent="Podés cambiar nombre, correo, rol y destino. Los cambios de acceso se aplican al guardar.";const ownerOpt=$("newUserRole").querySelector('option[value="owner"]');if(ownerOpt)ownerOpt.disabled=!canManageUsers()&&m.role!=="owner";openModal("userModal")}
 async function invokeAdminUsers(payload){
  try{const{data,error}=await sb.functions.invoke("admin-users",{body:payload});if(error){let detail="";try{if(error.context?.json)detail=(await error.context.json())?.error||""}catch{}throw new Error(detail||error.message||"No se pudo contactar la gestión de usuarios.")}if(data?.error)throw new Error(data.error);return data}
  catch(err){console.error("admin-users",err);const msg=String(err?.message||err||"");if(/Failed to send|FunctionsFetchError|404|not found/i.test(msg))throw new Error("La gestión de usuarios todavía no está activada en Supabase. Desplegá la función admin-users incluida con la app.");throw err}
 }
 async function saveUser(e){
- e.preventDefault();const editId=$("editUserId").value||null,payload={action:editId?"update":"invite",organization_id:state.org.id,user_id:editId,full_name:$("newUserName").value.trim(),email:$("newUserEmail").value.trim().toLowerCase(),role:$("newUserRole").value,destination_id:$("newUserDestination").value||null};
- if(state.mode==="demo"){
-  if(editId){const i=state.members.findIndex(x=>x.user_id===editId);if(i>=0)state.members[i]={...state.members[i],full_name:payload.full_name,email:payload.email,role:payload.role,destination_id:payload.destination_id}}
-  else state.members.push({id:uid(),organization_id:state.org.id,user_id:uid(),full_name:payload.full_name,email:payload.email,role:payload.role,destination_id:payload.destination_id,status:"active"});saveDemo()
- }else{const data=await invokeAdminUsers(payload);if(editId){const i=state.members.findIndex(x=>x.user_id===editId);if(i>=0)state.members[i]=data.membership}else state.members.push(data.membership)}
- closeModal("userModal");renderUsers();toast(editId?"Usuario actualizado.":"Usuario agregado / invitado.")
+ e.preventDefault();const submit=$("userSubmitBtn");const editId=$("editUserId").value||null,payload={action:editId?"update":"invite",organization_id:state.org.id,user_id:editId,full_name:$("newUserName").value.trim(),email:$("newUserEmail").value.trim().toLowerCase(),role:$("newUserRole").value,destination_id:$("newUserDestination").value||null};
+ if(!payload.full_name||!payload.email){toast("Completá nombre y correo.","warning");return}
+ try{
+  if(submit){submit.disabled=true;submit.textContent=editId?"Guardando…":"Creando…"}
+  if(state.mode==="demo"){
+   if(editId){const i=state.members.findIndex(x=>x.user_id===editId);if(i>=0)state.members[i]={...state.members[i],full_name:payload.full_name,email:payload.email,role:payload.role,destination_id:payload.destination_id}}
+   else state.members.push({id:uid(),organization_id:state.org.id,user_id:uid(),full_name:payload.full_name,email:payload.email,role:payload.role,destination_id:payload.destination_id,status:"active"});saveDemo()
+  }else{
+   await invokeAdminUsers(payload);await refreshMembersFromServer();
+   const persisted=editId?state.members.find(x=>x.user_id===editId):state.members.find(x=>String(x.email||"").toLowerCase()===payload.email);
+   if(!persisted)throw new Error("Supabase recibió la operación, pero no devolvió el usuario actualizado. Recargá la página y verificá la Edge Function admin-users.");
+   if(editId&&persisted.role!==payload.role)throw new Error(`El rol no quedó guardado en Supabase. Se esperaba ${USER_ROLE_LABELS[payload.role]||payload.role} y continúa como ${USER_ROLE_LABELS[persisted.role]||persisted.role}.`);
+  }
+  closeModal("userModal");renderAll();if(editId===state.user?.id&&!canView(document.querySelector(".app-view:not(.d-none)")?.id?.replace("view-","")||"overview"))switchView("overview");toast(editId?"Usuario actualizado y verificado en Supabase.":"Usuario agregado / invitado.");
+ }catch(err){console.error("saveUser",err);toast(err?.message||String(err),"danger")}finally{if(submit){submit.disabled=false;submit.textContent=editId?"Guardar cambios":"Crear / invitar"}}
 }
-async function toggleUserStatus(userId){const m=state.members.find(x=>x.user_id===userId);if(!m||userId===state.user?.id)return;const status=m.status==="disabled"?"active":"disabled";if(state.mode==="demo"){m.status=status;saveDemo()}else{const data=await invokeAdminUsers({action:"set_status",organization_id:state.org.id,user_id:userId,status});Object.assign(m,data.membership)}renderUsers();toast(status==="active"?"Usuario habilitado.":"Usuario deshabilitado.")}
-async function deleteManagedUser(userId){const m=state.members.find(x=>x.user_id===userId);if(!m||userId===state.user?.id)return;if(!confirm(`¿Eliminar a ${m.full_name}?\n\nSe quitará su acceso a Destintelligence. Esta acción no elimina las encuestas o estudios que haya creado.`))return;if(state.mode==="demo"){state.members=state.members.filter(x=>x.user_id!==userId);saveDemo()}else{await invokeAdminUsers({action:"delete",organization_id:state.org.id,user_id:userId});state.members=state.members.filter(x=>x.user_id!==userId)}renderUsers();toast("Usuario eliminado.")}
+
+async function toggleUserStatus(userId){const m=state.members.find(x=>x.user_id===userId);if(!m||userId===state.user?.id)return;const status=m.status==="disabled"?"active":"disabled";if(state.mode==="demo"){m.status=status;saveDemo()}else{await invokeAdminUsers({action:"set_status",organization_id:state.org.id,user_id:userId,status});await refreshMembersFromServer()}renderAll();toast(status==="active"?"Usuario habilitado.":"Usuario deshabilitado.")}
+async function deleteManagedUser(userId){const m=state.members.find(x=>x.user_id===userId);if(!m||userId===state.user?.id)return;if(!confirm(`¿Eliminar a ${m.full_name}?\n\nSe quitará su acceso a Destintelligence. Esta acción no elimina las encuestas o estudios que haya creado.`))return;if(state.mode==="demo"){state.members=state.members.filter(x=>x.user_id!==userId);saveDemo()}else{await invokeAdminUsers({action:"delete",organization_id:state.org.id,user_id:userId});await refreshMembersFromServer()}renderAll();toast("Usuario eliminado.")}
 async function handleUserTableAction(e){const btn=e.target.closest("[data-user-action]");if(!btn)return;const id=btn.dataset.userId,action=btn.dataset.userAction;try{if(action==="edit")prepareEditUser(id);if(action==="toggle")await toggleUserStatus(id);if(action==="delete")await deleteManagedUser(id)}catch(err){toast(err.message||String(err),"danger")}}
 
 function renderBranding(){const b=brand();$("brandName").value=b.institution_name||"";$("brandColor").value=b.primary_color||"#315d4d";$("brandFooter").value=b.footer||"";previewBrand()}
@@ -318,7 +348,7 @@ function openPublic(){const x=state.snapshots.find(s=>s.destination_id===state.d
    V4.2 — Questionnaire Builder
    Base editable + preguntas personalizadas por módulo
    ========================================================= */
-const SECTION_LABELS={context:"1. Quién es",journey:"2. Su viaje",experience:"3. Qué le pareció",opportunity:"4. Qué le faltó",extra:"5. Finalizar"};
+const SECTION_LABELS={context:"1. Quién es (Filtro y perfil)",journey:"2. Su viaje (Viaje y consumo)",experience:"3. Qué le pareció (Experiencia)",opportunity:"4. Qué le faltó (Oportunidades)",extra:"5. Finalizar (Adicionales)"};
 const CORE_QUESTIONS=[
  {key:"residenceArea",section:"context",target:"residenceArea",text:"Residencia habitual",required:true,fields:["residence_area"]},
  {key:"originCountry",section:"context",target:"originCountry",text:"País",required:true,fields:["origin_country"]},

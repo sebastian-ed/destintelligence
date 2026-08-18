@@ -1,8 +1,0 @@
-DESTINTELLIGENCE V5.5 · ACTUALIZACIÓN DESDE V5.4
-
-1. Reemplazá los archivos web por los de esta carpeta.
-2. Conservá tus valores reales en config.js.
-3. En Supabase > SQL Editor ejecutá una sola vez REPARAR-ACCESO-USUARIO.sql.
-4. Cerrá sesión y volvé a ingresar.
-
-La V5.5 diferencia autenticación de membresía. Si la instalación todavía no tiene ningún miembro activo, el primer usuario autenticado queda vinculado como Owner. Si ya existe un miembro activo, no se autoasignan permisos por seguridad.

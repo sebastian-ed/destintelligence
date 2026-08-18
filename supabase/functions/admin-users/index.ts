@@ -56,10 +56,9 @@ Deno.serve(async (req) => {
       return json({ error: "No tenés permiso para gestionar usuarios" }, 403);
     }
 
-    const requireOwnerForOwnerRole = (role: string) => {
-      if (role === "owner" && callerMember.role !== "owner") {
-        throw new Error("Solo el responsable principal puede asignar ese rol");
-      }
+    const requireOwnerForOwnerRole = (_role: string) => {
+      // Owner y Admin son gestores. Cualquiera de los dos puede asignar roles.
+      // La continuidad se controla por cantidad de gestores activos, no por exigir un owner permanente.
     };
 
     const getTarget = async (userId: string) => {
@@ -77,22 +76,20 @@ Deno.serve(async (req) => {
       return data;
     };
 
-    const ensureNotLastOwner = async (target: any, nextRole?: string, nextStatus?: string, deleting = false) => {
-      const wouldStopBeingOwner = target.role === "owner" && (
-        deleting ||
-        (nextRole && nextRole !== "owner") ||
-        (nextStatus && nextStatus !== "active")
-      );
-      if (!wouldStopBeingOwner) return;
-      const { count, error } = await admin
+    const ensureManagerContinuity = async (target: any, nextRole?: string, nextStatus?: string, deleting = false) => {
+      const managerRoles = new Set(["owner", "admin"]);
+      const isManagerNow = managerRoles.has(target.role) && target.status === "active";
+      const nextIsManager = !deleting && managerRoles.has(nextRole || target.role) && (nextStatus || target.status) === "active";
+      if (!isManagerNow || nextIsManager) return;
+      const { data, error } = await admin
         .from("organization_members")
-        .select("id", { count: "exact", head: true })
+        .select("user_id,role,status")
         .eq("organization_id", organizationId)
-        .eq("role", "owner")
         .eq("status", "active")
+        .in("role", ["owner", "admin"])
         .neq("user_id", target.user_id);
       if (error) throw new Error(error.message);
-      if (!count) throw new Error("La organización debe conservar al menos un responsable principal activo");
+      if (!data?.length) throw new Error("Debe quedar al menos un Responsable principal o Administrador activo en la organización");
     };
 
     if (body.action === "invite") {
@@ -153,7 +150,7 @@ Deno.serve(async (req) => {
       const destinationId = body.destination_id || null;
       if (!validRoles.has(role)) return json({ error: "Rol inválido" }, 400);
       requireOwnerForOwnerRole(role);
-      await ensureNotLastOwner(target, role, target.status, false);
+      await ensureManagerContinuity(target, role, target.status, false);
 
       const authChanges: Record<string, unknown> = {
         user_metadata: { full_name: fullName },
@@ -178,7 +175,7 @@ Deno.serve(async (req) => {
       const status = body.status === "active" ? "active" : "disabled";
       if (userId === user.id) return json({ error: "No podés deshabilitar tu propio usuario" }, 400);
       const target = await getTarget(userId);
-      await ensureNotLastOwner(target, target.role, status, false);
+      await ensureManagerContinuity(target, target.role, status, false);
       const { data: membership, error } = await admin
         .from("organization_members")
         .update({ status })
@@ -194,7 +191,7 @@ Deno.serve(async (req) => {
       const userId = String(body.user_id || "");
       if (userId === user.id) return json({ error: "No podés eliminar tu propio usuario" }, 400);
       const target = await getTarget(userId);
-      await ensureNotLastOwner(target, undefined, undefined, true);
+      await ensureManagerContinuity(target, undefined, undefined, true);
 
       const { error: deleteMembershipError } = await admin
         .from("organization_members")

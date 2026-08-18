@@ -1,20 +1,29 @@
-DESTINTELLIGENCE V5.6 · JUNÍN DE LOS ANDES
+DESTINTELLIGENCE V5.7 · JUNÍN DE LOS ANDES
 
-TU PROYECTO SUPABASE YA ESTÁ CONFIGURADO EN config.js.
+SI YA TENÉS V5.6 FUNCIONANDO:
 
-Si la base ya funciona:
-1. Reemplazá los archivos de GitHub por los de esta versión.
-2. NO vuelvas a ejecutar el SQL completo.
-3. Activá una sola vez la Edge Function admin-users para poder gestionar usuarios.
+1. Subí a GitHub los archivos de esta carpeta reemplazando los anteriores.
+2. En Supabase > SQL Editor ejecutá UNA VEZ:
+   ACTUALIZAR-PERMISOS-V5.7.sql
+3. Volvé a desplegar la Edge Function admin-users ejecutando:
+   DESPLEGAR-FUNCION-USUARIOS.ps1
+   o los comandos indicados en README.md.
+4. Hacé Ctrl + F5 en el navegador.
 
-Comandos rápidos:
-  npx supabase login
-  npx supabase link --project-ref dnnlbqnppxlmstneawrw
-  npx supabase functions deploy admin-users --no-verify-jwt
+NO vuelvas a ejecutar SUPABASE-INSTALACION-COMPLETA.sql sobre tu base actual.
+Ese archivo es únicamente para instalaciones nuevas.
 
-Después vas a poder Agregar, Editar, Habilitar/Deshabilitar y Eliminar usuarios desde la propia app.
-
-Si fuera una instalación completamente nueva, recién ahí usá:
-  SUPABASE-INSTALACION-COMPLETA.sql
-
-Nunca pongas la service_role en config.js.
+CAMBIOS PRINCIPALES V5.7:
+- Corrección del guardado/verificación al editar usuarios.
+- Responsable principal puede pasar a Administrador.
+- Se exige al menos un Responsable o Admin activo, no un Owner permanente.
+- Cambio Encuestador -> Analista queda persistido y verificado contra Supabase.
+- Encuestador tiene acceso reducido: Inicio + Registrar entrevista.
+- RLS limita al Encuestador a sus propias entrevistas/eventos.
+- Título del navegador: Destintelligence.
+- Encabezados del formulario conservados como:
+  1. Quién es (Filtro y perfil)
+  2. Su viaje (Viaje y consumo)
+  3. Qué le pareció (Experiencia)
+  4. Qué le faltó (Oportunidades)
+  5. Finalizar (Adicionales)

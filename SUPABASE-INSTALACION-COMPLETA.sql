@@ -1,4 +1,4 @@
--- DESTINTELLIGENCE V5.5 · INSTALACIÓN COMPLETA PARA SUPABASE
+-- DESTINTELLIGENCE V5.7 · INSTALACIÓN COMPLETA PARA SUPABASE
 create extension if not exists pgcrypto;
 
 create table if not exists public.organizations(
@@ -380,15 +380,36 @@ create policy org_read on public.organizations for select to authenticated using
 drop policy if exists dest_read on public.destinations;
 create policy dest_read on public.destinations for select to authenticated using(organization_id in(select public.current_org_ids()));
 drop policy if exists member_read on public.organization_members;
-create policy member_read on public.organization_members for select to authenticated using(organization_id in(select public.current_org_ids()));
+create policy member_read on public.organization_members for select to authenticated
+using(
+  organization_id in(select public.current_org_ids())
+  and (
+    user_id = auth.uid()
+    or public.current_role(organization_id) in ('owner','admin','analyst')
+  )
+);
 drop policy if exists studies_read on public.studies;
 create policy studies_read on public.studies for select to authenticated using(organization_id in(select public.current_org_ids()));
 drop policy if exists q_read on public.survey_questions;
 create policy q_read on public.survey_questions for select to authenticated using(organization_id in(select public.current_org_ids()));
 drop policy if exists visitor_read on public.visitor_records;
-create policy visitor_read on public.visitor_records for select to authenticated using(organization_id in(select public.current_org_ids()));
+create policy visitor_read on public.visitor_records for select to authenticated
+using(
+  organization_id in(select public.current_org_ids())
+  and (
+    public.current_role(organization_id) in ('owner','admin','analyst')
+    or created_by = auth.uid()
+  )
+);
 drop policy if exists events_read on public.field_events;
-create policy events_read on public.field_events for select to authenticated using(organization_id in(select public.current_org_ids()));
+create policy events_read on public.field_events for select to authenticated
+using(
+  organization_id in(select public.current_org_ids())
+  and (
+    public.current_role(organization_id) in ('owner','admin','analyst')
+    or created_by = auth.uid()
+  )
+);
 drop policy if exists coverage_read on public.coverage_targets;
 create policy coverage_read on public.coverage_targets for select to authenticated using(organization_id in(select public.current_org_ids()));
 drop policy if exists brand_read on public.destination_branding;
@@ -423,7 +444,11 @@ using(organization_id in(select public.current_org_ids()) and public.current_rol
 with check(organization_id in(select public.current_org_ids()) and public.current_role(organization_id) in('owner','admin'));
 
 drop policy if exists snapshots_private on public.public_snapshots;
-create policy snapshots_private on public.public_snapshots for select to authenticated using(organization_id in(select public.current_org_ids()));
+create policy snapshots_private on public.public_snapshots for select to authenticated
+using(
+  organization_id in(select public.current_org_ids())
+  and public.current_role(organization_id) in ('owner','admin','analyst')
+);
 drop policy if exists snapshots_write on public.public_snapshots;
 create policy snapshots_write on public.public_snapshots for all to authenticated
 using(organization_id in(select public.current_org_ids()) and public.current_role(organization_id) in('owner','admin','analyst'))
