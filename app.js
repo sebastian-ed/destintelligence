@@ -173,8 +173,26 @@ function enterDemo(){
   try{renderAll()}catch(renderErr){console.error("Error de renderizado de respaldo",renderErr)}
  }
 }
+async function ensureInitialOwner(){
+ try{
+  const{data,error}=await sb.rpc("ensure_destintelligence_initial_owner");
+  if(error){console.warn("No se pudo ejecutar el autoalta inicial",error);return null}
+  return data;
+ }catch(err){console.warn("Autoalta inicial no disponible",err);return null}
+}
 async function enterProd(user){state.mode="prod";state.user=user;try{
- const{data:members,error:me}=await sb.from("organization_members").select("*").eq("user_id",user.id).eq("status","active");if(me||!members?.length)throw new Error(me?.message||"El usuario no tiene una organización activa.");state.members=members;const orgId=members[0].organization_id;
+ let{data:members,error:me}=await sb.from("organization_members").select("*").eq("user_id",user.id).eq("status","active");
+ if(me)throw new Error(me.message);
+ if(!members?.length){
+   const repaired=await ensureInitialOwner();
+   if(repaired?.ok){
+     const retry=await sb.from("organization_members").select("*").eq("user_id",user.id).eq("status","active");
+     if(retry.error)throw new Error(retry.error.message);
+     members=retry.data||[];
+   }
+ }
+ if(!members?.length)throw new Error("Tu usuario está registrado en Supabase, pero todavía no está vinculado a la organización de Destintelligence. Ejecutá REPARAR-ACCESO-USUARIO.sql una vez en Supabase y volvé a ingresar.");
+ state.members=members;const orgId=members[0].organization_id;
  const [{data:org,error:oe},{data:dests,error:de},{data:allMembers,error:ame}]=await Promise.all([sb.from("organizations").select("*").eq("id",orgId).single(),sb.from("destinations").select("*").eq("organization_id",orgId),sb.from("organization_members").select("*").eq("organization_id",orgId)]);if(oe||de)throw new Error(oe?.message||de?.message);state.org=org;state.destinations=dests||[];state.members=allMembers||members;state.destinationId=members[0].destination_id||dests?.[0]?.id;
  const queries=await Promise.all([sb.from("studies").select("*").eq("organization_id",orgId),sb.from("survey_questions").select("*").eq("organization_id",orgId),sb.from("visitor_records").select("*").eq("organization_id",orgId).order("visited_at",{ascending:false}).limit(5000),sb.from("field_events").select("*").eq("organization_id",orgId).order("event_at",{ascending:false}).limit(5000),sb.from("coverage_targets").select("*").eq("organization_id",orgId),sb.from("destination_branding").select("*").eq("organization_id",orgId),sb.from("public_snapshots").select("*").eq("organization_id",orgId)]);
  const names=["estudios","preguntas","entrevistas","eventos","metas de cobertura","branding","snapshots"];queries.forEach((r,i)=>{if(r.error)throw new Error(`Error cargando ${names[i]}: ${r.error.message}`)});state.studies=queries[0].data||[];state.questions=queries[1].data||[];state.surveys=queries[2].data||[];state.events=queries[3].data||[];state.coverage=queries[4].data||[];state.branding=Object.fromEntries((queries[5].data||[]).map(x=>[x.destination_id,x]));state.snapshots=queries[6].data||[];state.activeStudyId=destinationStudies().find(x=>x.status==="active")?.id||destinationStudies()[0]?.id||null;showApp();

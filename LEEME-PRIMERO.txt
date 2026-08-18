@@ -16,7 +16,7 @@ NO ejecutes migraciones viejas. No hacen falta.
 El SQL único crea la estructura completa, vincula automáticamente al primer usuario como administrador y deja un estudio inicial de Junín de los Andes listo para empezar.
 
 
-IMPORTANTE V5.4 - GITHUB PAGES Y RECUPERACION DE CONTRASEÑA
+IMPORTANTE V5.5 - GITHUB PAGES Y RECUPERACION DE CONTRASEÑA
 1. Configurá config.js con SUPABASE_URL y SUPABASE_ANON_KEY (o publishable key).
 2. Subí config.js al mismo nivel que index.html.
 3. En Supabase > Authentication > URL Configuration, configurá la URL pública de GitHub Pages como Site URL y agregala también a Redirect URLs.

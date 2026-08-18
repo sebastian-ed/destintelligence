@@ -1,4 +1,4 @@
-# Destintelligence V5.4 Simple · Junín de los Andes
+# Destintelligence V5.5 Simple · Junín de los Andes
 
 Aplicación de inteligencia turística orientada a equipos municipales. La interfaz prioriza tres tareas: crear/preparar un estudio, registrar entrevistas y ver resultados. La metodología, los controles de calidad, la edición del cuestionario, la importación histórica, la segmentación y los hallazgos automáticos siguen disponibles sin recargar la operación diaria.
 
@@ -16,7 +16,7 @@ No uses migraciones antiguas. Esta versión incluye únicamente:
 
 `SUPABASE-INSTALACION-COMPLETA.sql`
 
-Ese archivo ya contiene el esquema final de Destintelligence V5.4, incluidas las variables agregadas en V5.2.
+Ese archivo ya contiene el esquema final de Destintelligence V5.5, incluidas las variables agregadas en V5.2.
 
 ### Paso 1 · Crear el primer usuario
 
@@ -74,7 +74,12 @@ Esta instalación nueva NO requiere:
 Todo quedó consolidado en `SUPABASE-INSTALACION-COMPLETA.sql`.
 
 
-## V5.4 · conexión y recuperación de contraseña
+
+## Si el usuario existe pero aparece “sin organización activa”
+
+Eso significa que el usuario está en Supabase Authentication, pero todavía no está vinculado a `organization_members`. Ejecutá una sola vez `REPARAR-ACCESO-USUARIO.sql` desde **Supabase > SQL Editor** y después volvé a iniciar sesión. La V5.5 intentará completar automáticamente la inicialización sólo si la instalación todavía no tiene ningún miembro activo.
+
+## V5.5 · conexión y recuperación de contraseña
 
 `index.html` y `public.html` cargan `config.js` automáticamente antes de iniciar Supabase. En versiones anteriores el archivo existía pero no era incluido por la página, por lo que la app podía mostrar el aviso de configuración aun con credenciales correctas.
 
