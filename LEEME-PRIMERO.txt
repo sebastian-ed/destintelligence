@@ -1,0 +1,16 @@
+DESTINTELLIGENCE · JUNÍN DE LOS ANDES
+
+PARA PROBAR
+1. Abrí index.html.
+2. Tocá “Abrir demo Junín de los Andes”.
+
+PARA USAR CON SUPABASE DESDE CERO
+1. Creá un proyecto Supabase.
+2. En Authentication, creá UN primer usuario.
+3. Ejecutá SOLO: SUPABASE-INSTALACION-COMPLETA.sql
+4. Abrí config.js y pegá la URL y la ANON KEY de tu proyecto.
+5. Publicá la carpeta.
+
+NO ejecutes migraciones viejas. No hacen falta.
+
+El SQL único crea la estructura completa, vincula automáticamente al primer usuario como administrador y deja un estudio inicial de Junín de los Andes listo para empezar.

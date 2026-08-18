@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#315d4d">
+  <title>Destintelligence V5.3 Simple · Junín de los Andes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="vendor/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="toastHost" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+<section id="loginView" class="login-shell">
+  <div class="login-main">
+    <div class="brand-lockup login-brand"><div class="brand-mark">D</div><div><strong>Destintelligence</strong><small>Demand intelligence para destinos</small></div></div>
+    <div class="login-copy">
+      <span class="eyebrow">Junín de los Andes · información para decidir mejor</span>
+      <h1>Registrá visitantes. Entendé qué necesitan. Decidí mejor.</h1>
+      <p>No necesitás saber estadística. La plataforma te guía paso a paso y hace los controles técnicos por detrás.</p>
+      <form id="loginForm" class="login-form">
+        <input id="loginEmail" class="form-control form-control-lg" type="email" placeholder="turismo@organizacion.gob.ar" required>
+        <input id="loginPassword" class="form-control form-control-lg" type="password" placeholder="Contraseña" required>
+        <button class="btn btn-primary btn-lg">Ingresar</button>
+        <button id="demoBtn" class="btn btn-outline-secondary btn-lg" type="button">Abrir demo Junín de los Andes</button>
+      </form>
+    </div>
+  </div>
+  <aside class="login-side">
+    <div><span class="eyebrow light">Simple para usar · serio para decidir</span><h3>Tres tareas. Todo lo demás lo hace el sistema.</h3></div>
+    <div class="side-grid">
+      <div><b>1. Preparar</b><span>Elegís qué querés preguntar. La app propone una base lista para usar.</span></div>
+      <div><b>2. Registrar</b><span>El encuestador sigue pasos simples y guarda cada entrevista.</span></div>
+      <div><b>3. Entender</b><span>Los resultados se ordenan automáticamente en gráficos y oportunidades.</span></div>
+      <div><b>Por detrás</b><span>Se conservan muestra, bases válidas, trazabilidad y controles de calidad.</span></div>
+    </div>
+  </aside>
+</section>
+
+<div id="appView" class="app-shell d-none">
+<header class="topbar">
+  <div class="d-flex align-items-center gap-3">
+    <button id="menuBtn" class="btn btn-light d-lg-none" type="button">☰</button>
+    <div class="brand-lockup compact"><div class="brand-mark">D</div><div><strong>Destintelligence</strong><small>Demand intelligence</small></div></div>
+  </div>
+  <div class="top-actions">
+    <span id="modeBadge" class="badge-soft">DEMO</span>
+    <select id="destinationSwitcher" class="form-select form-select-sm"></select>
+    <button id="logoutBtn" class="btn btn-outline-secondary btn-sm" type="button">Salir</button>
+  </div>
+</header>
+
+<aside id="sidebar" class="sidebar">
+  <nav class="nav flex-column simple-nav">
+    <div class="nav-section-label">Trabajo diario</div>
+    <button class="nav-link active" data-view="overview"><span class="nav-num">1</span><span><b>Inicio</b><small>Qué hacer ahora</small></span></button>
+    <button class="nav-link nav-action-primary" data-modal="surveyModal"><span class="nav-plus">+</span><span><b>Registrar entrevista</b><small>Cargar un visitante</small></span></button>
+    <button class="nav-link" data-view="studies"><span class="nav-num">2</span><span><b>Preparar estudio</b><small>Objetivo y período</small></span></button>
+    <button class="nav-link" data-view="forms"><span class="nav-num">3</span><span><b>Preguntas</b><small>Revisar o cambiar</small></span></button>
+    <button class="nav-link" data-view="demand"><span class="nav-num">4</span><span><b>Resultados</b><small>Qué dicen los datos</small></span></button>
+    <details class="advanced-nav">
+      <summary>Más herramientas</summary>
+      <button class="nav-link" data-view="field">Calidad del relevamiento</button>
+      <button class="nav-link" data-view="opportunities">Oportunidades</button>
+      <button class="nav-link" data-view="segments">Tipos de visitantes</button>
+      <button class="nav-link" data-view="reports">Crear informe</button>
+      <button class="nav-link" data-view="imports">Importar datos anteriores</button>
+      <button class="nav-link" data-view="public">Publicar resultados</button>
+      <button class="nav-link" data-view="users">Usuarios</button>
+      <button class="nav-link" data-view="branding">Logo y marca</button>
+    </details>
+  </nav>
+  <div class="sidebar-foot"><small>Organización</small><strong id="orgName">—</strong><span id="orgInfo">—</span></div>
+</aside>
+
+<main class="main-content">
+<section id="view-overview" class="app-view">
+  <div class="page-heading">
+    <div><span class="eyebrow">Inicio</span><h2 id="overviewTitle">¿Qué querés hacer?</h2><p>Elegí una tarea. La plataforma te guía sin pedirte conocimientos técnicos.</p></div>
+  </div>
+  <div class="workflow-grid">
+    <button class="workflow-card primary" data-modal="surveyModal"><span class="workflow-step">1</span><span><strong>Registrar una entrevista</strong><small>Usá el cuestionario y guardá un visitante.</small></span><span class="workflow-arrow">→</span></button>
+    <button class="workflow-card" data-view="forms"><span class="workflow-step">2</span><span><strong>Revisar las preguntas</strong><small>Podés usar las sugeridas o cambiarlas.</small></span><span class="workflow-arrow">→</span></button>
+    <button class="workflow-card" data-view="demand"><span class="workflow-step">3</span><span><strong>Ver resultados</strong><small>Gráficos y conclusiones se actualizan solos.</small></span><span class="workflow-arrow">→</span></button>
+  </div>
+  <div class="simple-study-strip">
+    <div><span>Estudio que estás usando</span><strong id="simpleStudyName">—</strong></div>
+    <div><span>Entrevistas cargadas</span><strong id="simpleStudyProgress">—</strong></div>
+    <button class="btn btn-outline-secondary btn-sm" data-view="studies">Cambiar estudio</button>
+  </div>
+  <div class="section-heading-simple"><div><span class="eyebrow">Resumen automático</span><h3>Así viene el estudio</h3></div><span>Estos números se actualizan con cada entrevista.</span></div>
+  <div class="kpi-grid six">
+    <article class="kpi-card"><span>Entrevistas</span><strong id="kpiVisitors">0</strong><small id="kpiTarget">Estudio activo</small></article>
+    <article class="kpi-card"><span>Pernoctan</span><strong id="kpiOvernight">—</strong><small id="kpiOvernightBase">Base —</small></article>
+    <article class="kpi-card"><span>Estadía media</span><strong id="kpiNights">—</strong><small>Noches · base válida</small></article>
+    <article class="kpi-card"><span>Gasto diario</span><strong id="kpiSpend">—</strong><small id="kpiSpendBase">Base —</small></article>
+    <article class="kpi-card"><span>NPS destino</span><strong id="kpiNps">—</strong><small id="kpiNpsBase">Base —</small></article>
+    <article class="kpi-card dark"><span>Calidad de campo</span><strong id="kpiQuality">—</strong><small id="kpiQualityLabel">Sin evaluar</small></article>
+  </div>
+  <div class="dashboard-grid">
+    <article class="panel wide"><div class="panel-head"><div><h3>Composición de la demanda</h3><p>Motivo principal de viaje.</p></div></div><div class="chart h300"><canvas id="overviewPurposeChart"></canvas></div></article>
+    <article class="panel"><div class="panel-head"><div><h3>Origen</h3><p>Mercados principales.</p></div></div><div class="chart h300"><canvas id="overviewOriginChart"></canvas></div></article>
+    <article class="panel wide"><div class="panel-head"><div><h3>Motivaciones</h3><p>Qué busca el visitante en Junín de los Andes.</p></div></div><div class="chart h270"><canvas id="overviewMotivationChart"></canvas></div></article>
+    <article class="panel executive"><div class="panel-head"><div><h3>Lectura ejecutiva</h3><p>Hallazgos automáticos con base y advertencias.</p></div></div><div id="insights"></div></article>
+  </div>
+</section>
+
+<section id="view-field" class="app-view d-none">
+  <div class="page-heading">
+    <div><span class="eyebrow">Control opcional</span><h2>Calidad del relevamiento</h2><p>Sirve para comprobar si estamos relevando de forma ordenada. No hace falta entrar acá para cargar entrevistas.</p></div>
+    <div class="actions"><button class="btn btn-outline-secondary" data-modal="eventModal">Registrar evento</button><button class="btn btn-outline-secondary" data-modal="coverageModal">Agregar meta</button><button class="btn btn-primary" data-modal="surveyModal">Nueva entrevista</button></div>
+  </div>
+  <div class="field-grid">
+    <article class="panel"><span>Muestra</span><div class="big-stat"><strong id="fieldN">0</strong><em id="fieldTarget">/0</em></div><div class="progress"><div id="fieldBar" class="progress-bar"></div></div></article>
+    <article class="panel"><span>Tasa de respuesta</span><div class="big-stat"><strong id="responseRate">—</strong></div><small id="responseBase">—</small></article>
+    <article class="panel"><span>GPS capturado</span><div class="big-stat"><strong id="gpsRate">—</strong></div><small>Entrevistas de campo</small></article>
+    <article class="panel"><span>Duración mediana</span><div class="big-stat"><strong id="durationMedian">—</strong></div><small>Control de speeders</small></article>
+  </div>
+  <div class="dashboard-grid mt-3">
+    <article class="panel wide"><div class="panel-head"><div><h3>Plan de cobertura</h3><p>Metas por punto y franja. Mejoran el campo; no son ponderadores.</p></div></div><div id="coverageGrid" class="coverage-grid"></div></article>
+    <article class="panel"><div class="panel-head"><div><h3>Alertas de calidad</h3><p>Controles automáticos.</p></div></div><div id="qualityAlerts"></div></article>
+  </div>
+  <article class="panel mt-3"><div class="panel-head"><div><h3>Últimas entrevistas</h3><p>Incluye visitante, punto, duración y precisión GPS.</p></div><button id="exportCsvBtn" class="btn btn-outline-secondary btn-sm">Exportar CSV</button></div>
+    <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Fecha</th><th>Encuestador</th><th>Punto</th><th>Tipo</th><th>Origen</th><th>Duración</th><th>GPS</th></tr></thead><tbody id="surveyTable"></tbody></table></div>
+  </article>
+</section>
+
+<section id="view-studies" class="app-view d-none">
+  <div class="page-heading"><div><span class="eyebrow">Paso 1</span><h2>Preparar el estudio</h2><p>Definí qué período vas a medir y cuántas entrevistas querés hacer. La configuración técnica queda prearmada.</p></div><button class="btn btn-primary" data-modal="studyModal">Empezar estudio</button></div>
+  <div class="active-row"><label>Estudio activo</label><select id="activeStudySelect" class="form-select"></select></div>
+  <div id="studiesGrid" class="card-grid"></div>
+</section>
+
+<section id="view-forms" class="app-view d-none">
+  <div class="page-heading"><div><span class="eyebrow">Paso 2</span><h2>Revisar las preguntas</h2><p>La app ya trae un cuestionario recomendado. Podés usarlo tal cual o cambiar solamente lo que necesites.</p></div><div class="actions"><button class="btn btn-primary" id="previewQuestionnaireBtn" type="button">Ver y editar cuestionario</button><button class="btn btn-outline-secondary" id="newQuestionBtn" type="button">Agregar pregunta</button></div></div>
+  <div class="simple-steps">
+    <div><b>1</b><span><strong>Miralo</strong><small>Ves exactamente lo que verá quien encuesta.</small></span></div>
+    <div><b>2</b><span><strong>Cambialo si hace falta</strong><small>Podés editar una pregunta sin tocar el resto.</small></span></div>
+    <div><b>3</b><span><strong>Listo</strong><small>Los resultados se actualizan con los nombres nuevos.</small></span></div>
+  </div>
+  <details class="question-admin-details">
+    <summary>Ver lista completa de preguntas y opciones avanzadas</summary>
+    <div class="question-admin-body">
+  <div id="formAlert" class="method-alert"></div>
+  <div class="questionnaire-toolbar">
+    <div><strong id="questionnaireActiveCount">—</strong><span>preguntas activas</span></div>
+    <div><strong id="questionnaireCustomCount">—</strong><span>agregadas</span></div>
+    <div><strong id="questionnaireAnsweredCount">—</strong><span>con datos</span></div>
+  </div>
+  <div class="builder-grid">
+    <article class="panel">
+      <div class="panel-head"><div><h3>Preguntas incluidas de base</h3><p>Son una guía profesional. Podés cambiar su redacción y sus opciones sin tener que saber estadística ni códigos internos.</p></div></div>
+      <div id="coreQuestionsList" class="question-list"></div>
+    </article>
+    <article class="panel">
+      <div class="panel-head"><div><h3>Preguntas agregadas por el destino</h3><p>Sirven para adaptar cada estudio a las necesidades locales. También aparecen automáticamente en resultados.</p></div></div>
+      <div id="questionsList" class="question-list"></div>
+    </article>
+  </div>
+  <div class="method-alert mt-3"><strong>Protección de datos históricos:</strong> podés renombrar opciones y cambiar qué opciones se ofrecen hacia adelante. Cuando ya existen respuestas, la aplicación conserva internamente la equivalencia para que los datos anteriores no se mezclen ni queden con nombres viejos.</div>
+    </div>
+  </details>
+</section>
+
+<section id="view-demand" class="app-view d-none">
+  <div class="page-heading"><div><span class="eyebrow">Paso 3</span><h2>Resultados</h2><p>La plataforma ordena las respuestas automáticamente. Mirá primero los datos principales y profundizá sólo si lo necesitás.</p></div><select id="demandStudySelect" class="form-select study-select"></select></div>
+<div class="simple-result-tools"><div class="simple-result-nav"><button class="active" data-view="demand">Datos principales</button><button data-view="opportunities">Qué está faltando</button><button data-view="segments">Tipos de visitantes</button></div><button class="btn btn-outline-secondary btn-sm" id="resultsAdvancedToggle" type="button">Ver análisis completo</button></div>
+  <div id="demandMethodAlert" class="method-alert"></div>
+  <div class="decision-strip" id="decisionStrip">
+    <article><span>Cómo llega</span><strong id="quickTransport">—</strong><small id="quickTransportBase">Base —</small></article>
+    <article><span>Canal principal</span><strong id="quickChannel">—</strong><small id="quickChannelBase">Base —</small></article>
+    <article><span>Actividad principal</span><strong id="quickActivity">—</strong><small id="quickActivityBase">Base —</small></article>
+    <article><span>Reserva</span><strong id="quickBooking">—</strong><small id="quickBookingBase">Base —</small></article>
+    <article><span>Época para volver</span><strong id="quickSeason">—</strong><small id="quickSeasonBase">Base —</small></article>
+  </div>
+  <div class="kpi-grid six">
+    <article class="kpi-card"><span>Muestra</span><strong id="demandN">0</strong><small id="demandTarget">—</small></article>
+    <article class="kpi-card"><span>Internacionales</span><strong id="demandInternational">—</strong><small id="demandInternationalBase">Base —</small></article>
+    <article class="kpi-card"><span>Primera visita</span><strong id="demandFirst">—</strong><small id="demandFirstBase">Base —</small></article>
+    <article class="kpi-card"><span>Estadía</span><strong id="demandAvgNights">—</strong><small>Noches</small></article>
+    <article class="kpi-card"><span>Gasto diario</span><strong id="demandAvgSpend">—</strong><small id="demandAvgSpendBase">Base —</small></article>
+    <article class="kpi-card"><span>Error referencia</span><strong id="demandMoe">—</strong><small id="demandMoeText">—</small></article>
+  </div>
+  <div class="dashboard-grid">
+    <article class="panel wide"><h3>Motivo de viaje</h3><div class="chart h300"><canvas id="demandPurposeChart"></canvas></div></article>
+    <article class="panel"><h3>Tipo de visitante</h3><div class="chart h300"><canvas id="visitorTypeChart"></canvas></div></article>
+    <article class="panel wide"><h3>Actividades realizadas</h3><div class="chart h330"><canvas id="activitiesChart"></canvas></div></article>
+    <article class="panel"><h3>Lugares / atractivos visitados</h3><div class="chart h330"><canvas id="neighborhoodsChart"></canvas></div></article>
+    <article class="panel wide"><h3>Gasto promedio por rubro</h3><div class="chart h320"><canvas id="spendChart"></canvas></div></article>
+    <article class="panel"><h3>Embudo de experiencia</h3><div id="experienceFunnel" class="funnel-list"></div></article>
+    <article class="panel full"><div class="panel-head"><div><h3>Importancia vs. satisfacción</h3><p>Importancia aproximada por selección de factores clave; satisfacción = media 0–10.</p></div></div><div id="priorityMatrix" class="priority-matrix"></div></article>
+    <article class="panel full"><div class="panel-head"><div><h3>Resultados por pregunta</h3><p>Cada resultado usa el nombre y las opciones actuales del cuestionario. La base válida indica cuántas personas respondieron esa pregunta.</p></div></div><div id="coreResults" class="custom-results"></div></article>
+    <article class="panel full"><div class="panel-head"><div><h3>Resultados de preguntas agregadas</h3><p>Se generan automáticamente según el tipo de respuesta elegido.</p></div></div><div id="customResults" class="custom-results"></div></article>
+  </div>
+</section>
+
+<section id="view-opportunities" class="app-view d-none">
+  <div class="page-heading"><div><span class="eyebrow">Resultados</span><h2>Qué está faltando</h2><p>Problemas y necesidades que los visitantes mencionaron y que pueden transformarse en acciones.</p></div><select id="opportunityStudySelect" class="form-select study-select"></select></div>
+  <div class="simple-result-nav"><button data-view="demand">Datos principales</button><button class="active" data-view="opportunities">Qué está faltando</button><button data-view="segments">Tipos de visitantes</button></div>
+  <div class="opportunity-summary">
+    <article class="summary-card"><span>Con necesidad no resuelta</span><strong id="unmetRate">—</strong><small id="unmetBase">Base —</small></article>
+    <article class="summary-card"><span>Perdió una compra</span><strong id="lostPurchaseRate">—</strong><small id="lostPurchaseBase">Base —</small></article>
+    <article class="summary-card"><span>Pagaría por resolverla</span><strong id="payIntentRate">—</strong><small id="payIntentBase">Base —</small></article>
+    <article class="summary-card"><span>Podría extender estadía</span><strong id="extendStayRate">—</strong><small id="extendStayBase">Base —</small></article>
+  </div>
+  <div class="dashboard-grid mt-3">
+    <article class="panel wide"><div class="panel-head"><div><h3>Ranking de oportunidades</h3><p>Score 0–100: incidencia, importancia, intención de pago e impacto real. Es priorización, no estimación causal.</p></div></div><div id="opportunityTable"></div></article>
+    <article class="panel"><h3>Fricciones principales</h3><div class="chart h350"><canvas id="frictionsChart"></canvas></div></article>
+    <article class="panel wide"><h3>Motivos de no conversión</h3><div class="chart h300"><canvas id="unmetReasonChart"></canvas></div></article>
+    <article class="panel"><h3>Qué extendería la estadía</h3><div class="chart h300"><canvas id="stayExtensionChart"></canvas></div></article>
+    <article class="panel full"><div class="panel-head"><div><h3>Voz del visitante</h3><p>Respuestas abiertas asociadas a necesidades no resueltas.</p></div></div><div id="verbatims" class="verbatim-grid"></div></article>
+  </div>
+</section>
+
+<section id="view-segments" class="app-view d-none">
+  <div class="page-heading"><div><span class="eyebrow">Resultados</span><h2>Tipos de visitantes</h2><p>Agrupaciones prácticas para entender qué perfiles llegan y qué busca cada uno.</p></div><select id="segmentStudySelect" class="form-select study-select"></select></div>
+  <div class="simple-result-nav"><button data-view="demand">Datos principales</button><button data-view="opportunities">Qué está faltando</button><button class="active" data-view="segments">Tipos de visitantes</button></div>
+  <div id="segmentsGrid" class="segment-grid"></div>
+  <article class="panel mt-3"><h3>Comparación de segmentos</h3><div class="table-responsive"><table class="table"><thead><tr><th>Segmento</th><th>Casos</th><th>Estadía</th><th>Gasto diario</th><th>NPS</th><th>Necesidad no resuelta</th><th>Principal motivación</th></tr></thead><tbody id="segmentsTable"></tbody></table></div></article>
+</section>
+
+<section id="view-imports" class="app-view d-none">
+  <div class="page-heading"><div><span class="eyebrow">Herramienta avanzada</span><h2>Traer datos anteriores</h2><p>Si ya tenés encuestas en Excel o CSV, podés incorporarlas sin perder su origen.</p></div></div>
+  <div class="import-grid">
+    <article class="panel"><h3>Archivo</h3><input id="historyFile" class="form-control mt-3" type="file" accept=".csv"><div class="method-note mt-3">Los registros quedan marcados como históricos. Los campos ausentes quedan nulos; no se inventan respuestas.</div></article>
+    <article class="panel"><h3>Mapeo</h3><div id="mappingGrid" class="mapping-grid"><span class="empty">Cargá un CSV.</span></div></article>
+    <article class="panel full"><div class="panel-head"><div><h3>Vista previa</h3><p id="importPreviewLabel">Sin archivo.</p></div><button id="runImportBtn" class="btn btn-primary" disabled>Importar</button></div><div class="table-responsive"><table class="table"><thead id="previewHead"></thead><tbody id="previewBody"></tbody></table></div></article>
+  </div>
+</section>
+
+<section id="view-reports" class="app-view d-none">
+  <div class="page-heading"><div><span class="eyebrow">Reporting</span><h2>Informe de demanda</h2><p>Resumen ejecutivo, metodología, demanda, experiencia y oportunidades.</p></div></div>
+  <div class="report-builder panel">
+    <div class="row g-3">
+      <div class="col-md-4"><label class="form-label">Estudio</label><select id="reportStudySelect" class="form-select"></select></div>
+      <div class="col-md-4"><label class="form-label">Título</label><input id="reportTitle" class="form-control" value="Estudio de Demanda Turística"></div>
+      <div class="col-md-4"><label class="form-label">Firma</label><input id="reportSignature" class="form-control" value="Observatorio / Dirección de Turismo"></div>
+      <div class="col-12"><div class="form-check"><input class="form-check-input" type="checkbox" id="reportIncludeVerbatims" checked><label class="form-check-label" for="reportIncludeVerbatims">Incluir ejemplos anonimizados de respuestas abiertas</label></div></div>
+    </div>
+    <div class="actions mt-3"><button id="generateReportBtn" class="btn btn-primary">Generar informe / PDF</button></div>
+  </div>
+</section>
+
+<section id="view-public" class="app-view d-none">
+  <div class="page-heading"><div><span class="eyebrow">Transparencia</span><h2>Dashboard público</h2><p>Publicá exclusivamente información agregada.</p></div></div>
+  <div class="panel public-builder">
+    <div class="row g-3"><div class="col-md-5"><label class="form-label">Estudio</label><select id="publicStudySelect" class="form-select"></select></div><div class="col-md-5"><label class="form-label">Slug</label><input id="publicSlug" class="form-control" value="buenos-aires-demanda"></div><div class="col-md-2 d-flex align-items-end"><button id="publishBtn" class="btn btn-primary w-100">Publicar</button></div></div>
+    <div class="method-note mt-3" id="publishStatus">No publicado.</div>
+    <button id="openPublicBtn" class="btn btn-outline-secondary btn-sm mt-3" disabled>Abrir dashboard público</button>
+  </div>
+</section>
+
+<section id="view-users" class="app-view d-none">
+  <div class="page-heading"><div><span class="eyebrow">Gobernanza</span><h2>Usuarios</h2><p>Roles por organización y destino.</p></div><button class="btn btn-primary" data-modal="userModal">Agregar usuario</button></div>
+  <div class="panel"><div class="table-responsive"><table class="table"><thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Destino</th><th>Estado</th></tr></thead><tbody id="usersTable"></tbody></table></div></div>
+</section>
+
+<section id="view-branding" class="app-view d-none">
+  <div class="page-heading"><div><span class="eyebrow">White label</span><h2>Marca institucional</h2><p>Identidad aplicada a reportes y publicación.</p></div></div>
+  <div class="branding-grid">
+    <form id="brandingForm" class="panel"><label class="form-label">Nombre institucional</label><input id="brandName" class="form-control mb-3" required><label class="form-label">Color principal</label><input id="brandColor" class="form-control form-control-color mb-3" type="color"><label class="form-label">Logo</label><input id="brandLogo" class="form-control mb-3" type="file" accept="image/*"><label class="form-label">Pie institucional</label><textarea id="brandFooter" class="form-control mb-3" rows="3"></textarea><button class="btn btn-primary">Guardar marca</button></form>
+    <article id="brandPreview" class="brand-preview"><span>Informe de demanda</span><h2 id="brandPreviewName">Junín de los Andes</h2><p>Inteligencia para decisiones de producto, gestión y mercado.</p></article>
+  </div>
+</section>
+</main>
+</div>
+
+<!-- SURVEY MODAL -->
+<div class="modal fade show-optional" id="surveyModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-scrollable"><form id="surveyForm" class="modal-content">
+  <div class="modal-header"><div><span class="eyebrow" id="surveyModeEyebrow">Entrevista</span><h3 class="modal-title" id="surveyModalTitle">Registrar visitante</h3></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+  <div class="modal-body">
+    <input type="hidden" id="surveyStartedAt">
+    <div id="questionnaireEditBanner" class="edit-preview-banner d-none"><div><strong>Modo edición</strong><span>Este es el mismo cuestionario que usa el encuestador. Tocá <b>Editar</b> al lado de cualquier pregunta para modificarla.</span></div><button type="button" class="btn btn-sm btn-outline-secondary" id="previewAddQuestionBtn">+ Agregar pregunta</button></div>
+    <div id="interviewerGuide" class="interviewer-guide"><div><strong>Es simple</strong><span>Leé cada pregunta y marcá lo que responda la persona. Si no sabe una respuesta opcional, dejala vacía.</span></div><button type="button" class="btn btn-sm btn-outline-secondary" id="surveyOptionalToggle">Ocultar preguntas opcionales</button></div>
+    <ul class="nav nav-pills survey-tabs mb-4" id="surveyTabs" role="tablist">
+      <li class="nav-item"><button class="nav-link active" type="button" data-bs-toggle="pill" data-bs-target="#survey-context">1. Quién es (Filtro y perfil)</button></li>
+      <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-journey">2. Su viaje (Viaje y consumo)</button></li>
+      <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-experience">3. Qué le pareció (Experiencia)</button></li>
+      <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-opportunity">4. Qué le faltó (Oportunidades)</button></li>
+      <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-extra">5. Preguntas adicionales</button></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="survey-context">
+        <div class="form-section"><h4>Dónde se hace la entrevista</h4><div class="row g-3">
+          <div class="col-md-4"><label class="form-label">Punto de relevamiento *</label><input id="surveyPoint" class="form-control" placeholder="Ej. Río Chimehuín · Costanera" required></div>
+          <div class="col-md-4"><label class="form-label">Franja *</label><select id="surveyTimeBand" class="form-select" required><option value="morning">Mañana</option><option value="afternoon">Tarde</option><option value="evening">Noche</option></select></div>
+          <div class="col-md-4"><label class="form-label">Método de selección</label><select id="surveySelection" class="form-select"><option value="systematic">Sistemática (cada n°)</option><option value="quota">Cuota</option><option value="other">Otro</option></select></div>
+        </div></div>
+        <div class="form-section"><h4>De dónde viene</h4><div class="row g-3">
+          <div class="col-md-4"><label class="form-label">Residencia habitual *</label><select id="residenceArea" class="form-select" required><option value="outside_argentina">Fuera de Argentina</option><option value="argentina_outside_neuquen">Argentina, fuera de Neuquén</option><option value="neuquen_outside_junin">Neuquén, fuera de Junín de los Andes</option><option value="junin_de_los_andes">Junín de los Andes</option></select></div>
+          <div class="col-md-4"><label class="form-label">País *</label><input id="originCountry" class="form-control" value="Argentina" required></div>
+          <div class="col-md-4"><label class="form-label">Provincia / Estado</label><input id="originProvince" class="form-control"></div>
+          <div class="col-md-4"><label class="form-label">Ciudad / localidad</label><input id="originCity" class="form-control"></div>
+          <div class="col-md-4"><label class="form-label">¿Viaje habitual por trabajo/estudio?</label><select id="usualCommuter" class="form-select"><option value="false">No</option><option value="true">Sí</option></select></div>
+          <div class="col-md-4"><label class="form-label">¿Pernocta en Junín de los Andes? *</label><select id="overnight" class="form-select" required><option value="true">Sí</option><option value="false">No</option></select></div>
+        </div><div id="eligibilityAlert" class="method-note mt-3"></div></div>
+        <div class="form-section"><h4>Cómo es su viaje</h4><div class="row g-3">
+          <div class="col-md-3"><label class="form-label">Edad</label><select id="ageRange" class="form-select"><option value="18-24">18–24</option><option value="25-34">25–34</option><option value="35-44">35–44</option><option value="45-54">45–54</option><option value="55-64">55–64</option><option value="65+">65+</option><option value="no_answer">Prefiere no responder</option></select></div>
+          <div class="col-md-3"><label class="form-label">Género (opcional)</label><select id="gender" class="form-select"><option value="">Sin respuesta</option><option value="female">Mujer</option><option value="male">Varón</option><option value="nonbinary">No binario / otro</option><option value="no_answer">Prefiere no responder</option></select></div>
+          <div class="col-md-3"><label class="form-label">Grupo *</label><select id="partyType" class="form-select" required><option>Solo/a</option><option>Pareja</option><option>Familia</option><option>Amigos</option><option>Colegas / trabajo</option><option>Grupo organizado</option></select></div>
+          <div class="col-md-3"><label class="form-label">Cantidad de personas</label><input id="partySize" type="number" min="1" max="50" class="form-control" value="2"></div>
+          <div class="col-md-3"><label class="form-label">Menores en el grupo</label><input id="childrenCount" type="number" min="0" max="20" class="form-control" value="0"></div>
+          <div class="col-md-3"><label class="form-label">Primera visita</label><select id="firstVisit" class="form-select"><option value="true">Sí</option><option value="false">No</option></select></div>
+          <div class="col-md-3"><label class="form-label">Visitas previas</label><input id="previousVisits" type="number" min="0" max="100" class="form-control" value="0"></div>
+          <div class="col-md-3"><label class="form-label">Noches en Junín de los Andes</label><input id="nights" type="number" min="0" max="365" class="form-control" value="3"></div>
+          <div class="col-md-6"><label class="form-label">Alojamiento</label><select id="accommodation" class="form-select"><option value="hotel">Hotel</option><option value="rental">Alquiler temporario</option><option value="hostel">Hostel</option><option value="friends_family">Casa de familiares/amigos</option><option value="other">Otro</option><option value="none">No pernocta</option></select></div>
+          <div class="col-md-6"><label class="form-label">Motivo principal *</label><select id="tripPurpose" class="form-select" required><option>Vacaciones / ocio</option><option>Visita a familiares o amigos</option><option>Negocios</option><option>Congreso / evento</option><option>Estudio</option><option>Salud</option><option>Compras</option><option>Escala / tránsito</option><option>Evento deportivo</option><option>Recital / espectáculo</option><option>Otro</option></select></div>
+        </div></div>
+        <div id="customSection-context" class="form-section custom-module d-none"><h4>Preguntas personalizadas</h4><div id="dynamicQuestions-context" class="dynamic-questions"></div></div>
+      </div>
+
+      <div class="tab-pane fade" id="survey-journey">
+        <div class="form-section"><div class="core-block"><h4>Motivaciones</h4><p>Seleccione todas las relevantes.</p><div id="motivationsChecks" class="check-grid"></div></div><div class="row g-3 mt-1"><div class="col-md-6"><label class="form-label">Driver principal de elección</label><select id="primaryDriver" class="form-select"></select></div><div class="col-md-6"><label class="form-label">Otro destino que consideró</label><input id="alternativeDestination" class="form-control" placeholder="Ej. Río de Janeiro, Mendoza, Montevideo"></div></div></div>
+        <div class="form-section"><h4>Cómo organizó el viaje</h4><p>Estas preguntas ayudan a saber cómo llega la gente, cómo decide y por dónde conviene comunicar el destino.</p><div class="row g-3">
+          <div class="col-md-4"><label class="form-label">Medio principal para llegar</label><select id="transportMode" class="form-select"><option value="auto">Auto particular</option><option value="bus">Ómnibus</option><option value="plane_transfer">Avión + traslado</option><option value="motorhome">Motorhome / casa rodante</option><option value="motorcycle">Moto</option><option value="bicycle">Bicicleta</option><option value="transfer_tour">Transfer / excursión</option><option value="other">Otro</option></select></div>
+          <div class="col-md-4"><label class="form-label">Anticipación de decisión</label><select id="planningLead" class="form-select"><option>Menos de 1 semana</option><option>1–4 semanas</option><option>1–3 meses</option><option>3–6 meses</option><option>Más de 6 meses</option></select></div>
+          <div class="col-md-4"><label class="form-label">Canal que más influyó para elegir Junín</label><select id="primaryInfoChannel" class="form-select"><option value="">No sabe / no responde</option></select></div>
+          <div class="col-12"><label class="form-label">¿Dónde buscó información? <span class="plain-help">Puede marcar varias.</span></label><div id="channelsChecks" class="check-grid compact"></div></div>
+          <div class="col-md-6"><label class="form-label">¿Cómo reservó el alojamiento?</label><select id="bookingChannel" class="form-select"><option value="direct_whatsapp">Directo con el alojamiento · WhatsApp / teléfono</option><option value="direct_web">Web propia del alojamiento</option><option value="ota">Booking / Airbnb / otra plataforma</option><option value="agency">Agencia de viajes</option><option value="walk_in">Sin reserva previa</option><option value="friends_family">Casa de familiares / amigos</option><option value="not_applicable">No aplica / no pernocta</option></select></div>
+        </div></div>
+        <div class="form-section"><h4>Actividades y lugares visitados</h4><div class="row g-4"><div class="col-md-6"><label class="form-label">Actividades realizadas</label><div id="activitiesChecks" class="check-grid"></div></div><div class="col-md-6"><label class="form-label">Lugares / atractivos visitados</label><div id="neighborhoodChecks" class="check-grid"></div></div><div class="col-md-6"><label class="form-label">Actividad principal de la visita</label><select id="primaryActivity" class="form-select"><option value="">No sabe / no responde</option></select></div><div class="col-md-4"><label class="form-label">Lugar / atractivo donde pasó más tiempo</label><select id="mainNeighborhood" class="form-select"></select></div><div class="col-md-4"><label class="form-label">Lugar / atractivo que quiso conocer y no visitó</label><select id="missedNeighborhood" class="form-select"></select></div><div class="col-md-4"><label class="form-label">Motivo de no visita</label><select id="missedNeighborhoodReason" class="form-select"><option value="">No aplica</option><option>Falta de tiempo</option><option>Falta de información</option><option>Le quedaba lejos</option><option>Seguridad percibida</option><option>No encontró propuesta concreta</option><option>Otro</option></select></div></div></div>
+        <div class="form-section"><h4>Gasto</h4><p>Importes aproximados por persona y por día. Si no sabe, dejar vacío.</p><div class="row g-3"><div class="col-md-3"><label class="form-label">Moneda</label><select id="spendCurrency" class="form-select"><option>USD</option><option>ARS</option><option>BRL</option><option>EUR</option><option>UYU</option><option>CLP</option></select></div><div class="col-md-3"><label class="form-label">Alojamiento</label><input id="spendAccommodation" type="number" min="0" step="0.01" class="form-control"></div><div class="col-md-3"><label class="form-label">Gastronomía</label><input id="spendFood" type="number" min="0" step="0.01" class="form-control"></div><div class="col-md-3"><label class="form-label">Transporte</label><input id="spendTransport" type="number" min="0" step="0.01" class="form-control"></div><div class="col-md-3"><label class="form-label">Tours / actividades</label><input id="spendActivities" type="number" min="0" step="0.01" class="form-control"></div><div class="col-md-3"><label class="form-label">Cultura / espectáculos</label><input id="spendCulture" type="number" min="0" step="0.01" class="form-control"></div><div class="col-md-3"><label class="form-label">Compras</label><input id="spendShopping" type="number" min="0" step="0.01" class="form-control"></div><div class="col-md-3"><label class="form-label">Vida nocturna / otros</label><input id="spendOther" type="number" min="0" step="0.01" class="form-control"></div></div></div>
+        <div id="customSection-journey" class="form-section custom-module d-none"><h4>Preguntas personalizadas</h4><div id="dynamicQuestions-journey" class="dynamic-questions"></div></div>
+      </div>
+
+      <div class="tab-pane fade" id="survey-experience">
+        <div class="form-section"><h4>Factores más importantes</h4><p>Elegir hasta 5 factores que más influyeron en la experiencia.</p><div id="importanceChecks" class="check-grid"></div></div>
+        <div class="form-section"><h4>Satisfacción por atributo</h4><p>Escala 0–10. Deje vacío si no puede evaluarlo.</p><div id="satisfactionGrid" class="rating-grid"></div></div>
+        <div class="form-section"><h4>Resultado global</h4><div class="row g-3"><div class="col-md-3"><label class="form-label">Recomendaría Junín de los Andes (0–10)</label><input id="recommendScore" type="number" min="0" max="10" class="form-control" value="8"></div><div class="col-md-3"><label class="form-label">Probabilidad de volver (0–10)</label><input id="revisitScore" type="number" min="0" max="10" class="form-control" value="8"></div><div class="col-md-3"><label class="form-label">Experiencia general (0–10)</label><input id="overallSatisfaction" type="number" min="0" max="10" class="form-control" value="8"></div><div class="col-md-3"><label class="form-label">¿En qué época volvería o recomendaría venir?</label><select id="preferredSeason" class="form-select"><option value="summer">Verano · dic–feb</option><option value="autumn">Otoño · mar–may</option><option value="winter">Invierno · jun–ago</option><option value="spring">Primavera · sep–nov</option><option value="any">Cualquier época</option><option value="unknown">No sabe</option></select></div></div></div>
+        <div class="form-section"><div class="core-block"><h4>Fricciones</h4><div id="problemsChecks" class="check-grid"></div></div><div class="row g-3 mt-1"><div class="col-md-4"><label class="form-label">Problema principal</label><select id="mainProblem" class="form-select"></select></div><div class="col-md-2"><label class="form-label">Severidad 0–10</label><input id="problemSeverity" type="number" min="0" max="10" class="form-control"></div><div class="col-md-3"><label class="form-label">¿Le impidió hacer algo?</label><select id="blockedAction" class="form-select"><option value="false">No</option><option value="true">Sí</option></select></div><div class="col-md-3"><label class="form-label">¿Dejó de comprar?</label><select id="lostPurchase" class="form-select"><option value="false">No</option><option value="true">Sí</option></select></div></div></div>
+        <div id="customSection-experience" class="form-section custom-module d-none"><h4>Preguntas personalizadas</h4><div id="dynamicQuestions-experience" class="dynamic-questions"></div></div>
+      </div>
+
+      <div class="tab-pane fade" id="survey-opportunity">
+        <div class="form-section opportunity-form"><h4>Demanda insatisfecha</h4><p>Primero identificar el problema; después medir si existe valor económico.</p><div class="row g-3"><div class="col-md-6"><label class="form-label">¿Quiso hacer/comprar/contratar algo y no pudo?</label><select id="hasUnmetNeed" class="form-select"><option value="false">No</option><option value="true">Sí</option></select></div><div class="col-md-6 unmet-only"><label class="form-label">Categoría principal</label><select id="unmetCategory" class="form-select"></select></div><div class="col-12 unmet-only"><label class="form-label">¿Qué quiso encontrar?</label><textarea id="unmetNeedText" class="form-control" rows="2" placeholder="Describa la necesidad en palabras del visitante"></textarea></div><div class="col-md-4 unmet-only"><label class="form-label">¿Qué ocurrió?</label><select id="unmetReason" class="form-select"><option>No existía / no encontró oferta</option><option>Estaba agotado</option><option>Demasiado caro</option><option>Horarios incompatibles</option><option>Ubicación inconveniente</option><option>Idioma</option><option>Reserva demasiado anticipada</option><option>Mala información</option><option>No parecía confiable</option><option>Calidad insuficiente</option><option>Otro</option></select></div><div class="col-md-4 unmet-only"><label class="form-label">Importancia de resolverlo 0–10</label><input id="unmetImportance" type="number" min="0" max="10" class="form-control" value="7"></div><div class="col-md-4 unmet-only"><label class="form-label">¿Pagaría por una solución?</label><select id="wouldPay" class="form-select"><option value="definitely_yes">Definitivamente sí</option><option value="probably_yes">Probablemente sí</option><option value="probably_no">Probablemente no</option><option value="definitely_no">Definitivamente no</option></select></div><div class="col-md-6 unmet-only"><label class="form-label">Solución esperada</label><textarea id="expectedSolution" class="form-control" rows="2"></textarea></div><div class="col-md-3 unmet-only"><label class="form-label">Precio máximo probable</label><input id="expectedPrice" type="number" min="0" step="0.01" class="form-control"></div><div class="col-md-3 unmet-only"><label class="form-label">Moneda</label><select id="expectedPriceCurrency" class="form-select"><option>USD</option><option>ARS</option><option>BRL</option><option>EUR</option></select></div></div></div>
+        <div class="form-section"><h4>Extensión de estadía</h4><div class="row g-3"><div class="col-md-6"><label class="form-label">¿Algo concreto podría haberlo hecho quedarse una noche más?</label><select id="couldExtendStay" class="form-select"><option value="false">No</option><option value="true">Sí</option></select></div><div class="col-md-6"><label class="form-label">Principal disparador</label><select id="stayExtensionDriver" class="form-select"><option value="">No aplica</option><option>Más actividades / experiencias</option><option>Evento o espectáculo</option><option>Mejor precio / promoción</option><option>Paquete alojamiento + actividad</option><option>Gastronomía</option><option>Vida nocturna</option><option>Actividades familiares</option><option>Mejor conectividad / transporte</option><option>Otro</option></select></div></div></div>
+        <div class="form-section"><h4>Concept test opcional</h4><div class="row g-3"><div class="col-md-6"><label class="form-label">Concepto presentado</label><input id="conceptName" class="form-control" placeholder="Ej. Experiencia guiada Chimehuín + gastronomía regional"></div><div class="col-md-3"><label class="form-label">Interés 0–10</label><input id="conceptInterest" type="number" min="0" max="10" class="form-control"></div><div class="col-md-3"><label class="form-label">Probabilidad de compra 0–10</label><input id="conceptPurchase" type="number" min="0" max="10" class="form-control"></div></div></div>
+        <div id="customSection-opportunity" class="form-section custom-module d-none"><h4>Preguntas personalizadas</h4><div id="dynamicQuestions-opportunity" class="dynamic-questions"></div></div>
+      </div>
+
+      <div class="tab-pane fade" id="survey-extra">
+        <div id="customSection-extra" class="form-section custom-module"><h4>Preguntas personalizadas</h4><div id="dynamicQuestions-extra" class="dynamic-questions"></div></div>
+        <div class="form-section"><h4>Control</h4><div class="row g-3"><div class="col-md-8"><label class="form-label">Observación del encuestador</label><textarea id="fieldObservation" class="form-control" rows="3"></textarea></div><div class="col-md-4"><label class="form-label">Ubicación</label><button id="gpsBtn" class="btn btn-outline-secondary w-100" type="button">Capturar GPS</button><div id="gpsStatus" class="method-note mt-2">Sin ubicación.</div></div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer"><span id="surveyMethodHint" class="me-auto small text-secondary"></span><span id="surveyProgressText" class="survey-progress-text">Paso 1 de 5</span><button type="button" class="btn btn-light" id="surveyPrevBtn">Anterior</button><button type="button" class="btn btn-outline-secondary" id="surveyNextBtn">Siguiente</button><button type="button" class="btn btn-light" data-bs-dismiss="modal" id="surveyCancelBtn">Cancelar</button><button class="btn btn-primary" id="surveySaveBtn">Guardar entrevista</button></div>
+</form></div></div>
+
+<!-- STUDY MODAL -->
+<div class="modal fade" id="studyModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><form id="studyForm"><div class="modal-header"><div><span class="eyebrow">Nuevo estudio</span><h3 class="modal-title">Preparar un relevamiento</h3></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="simple-modal-intro"><strong>Con pocos datos alcanza para empezar.</strong><span>La app ya deja configurado un método recomendado. Si alguien necesita modificar la metodología, puede abrir las opciones avanzadas.</span></div><div class="row g-3">
+  <div class="col-md-6"><label class="form-label">Nombre del estudio *</label><input id="studyName" class="form-control" value="Demanda turística Junín de los Andes" required></div>
+  <div class="col-md-6"><label class="form-label">Método *</label><select id="studyMethod" class="form-select"><option value="systematic_intercept">Interceptación sistemática</option><option value="stratified">Estratificado</option><option value="simple_random">Aleatorio simple</option><option value="quota">Cuotas</option><option value="convenience">Conveniencia</option><option value="open_link">Enlace abierto</option></select></div>
+  <div class="col-12"><label class="form-label">¿A quiénes queremos entrevistar? *</label><textarea id="studyUniverse" class="form-control" rows="2" required>Visitantes de 18 años o más presentes en Junín de los Andes y su área turística de influencia durante el período de estudio, excluyendo residentes habituales y viajeros recurrentes exclusivamente por trabajo/estudio cuando corresponda.</textarea></div>
+  <div class="col-md-4"><label class="form-label">Población estimada</label><input id="studyPopulation" type="number" min="1" class="form-control"></div>
+  <div class="col-md-4"><label class="form-label">Confianza</label><select id="studyConfidence" class="form-select"><option value="0.90">90%</option><option value="0.95" selected>95%</option><option value="0.99">99%</option></select></div>
+  <div class="col-md-4"><label class="form-label">Margen objetivo</label><select id="studyMargin" class="form-select"><option value="0.03">±3%</option><option value="0.04" selected>±4%</option><option value="0.05">±5%</option></select></div>
+  <div class="col-md-4"><label class="form-label">¿Cuántas entrevistas queremos completar? *</label><input id="studyTarget" type="number" min="30" class="form-control" value="600" required></div>
+  <div class="col-md-4"><label class="form-label">Base mínima por subgrupo</label><input id="studyMinSubgroup" type="number" min="30" class="form-control" value="60"></div>
+  <div class="col-md-4"><label class="form-label">Regla sistemática</label><input id="studyInterceptEvery" type="number" min="1" class="form-control" value="3"></div>
+  <div class="col-md-6"><label class="form-label">Inicio *</label><input id="studyStart" type="date" class="form-control" required></div><div class="col-md-6"><label class="form-label">Fin *</label><input id="studyEnd" type="date" class="form-control" required></div>
+  <div class="col-12"><label class="form-label">Notas de diseño / estratos</label><textarea id="studyDesignNotes" class="form-control" rows="3" placeholder="Ej. Cobertura por nodos de transporte, corredores turísticos, alojamientos y eventos; días hábiles/fines de semana; mañana/tarde/noche."></textarea></div>
+  <div class="col-12"><button type="button" class="btn btn-outline-secondary btn-sm" id="studyAdvancedToggle">Ver configuración avanzada</button></div>
+  <div class="col-12"><div id="sampleCalcNote" class="method-note"></div></div>
+</div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Empezar estudio</button></div></form></div></div></div>
+
+<!-- QUESTION MODAL -->
+<div class="modal fade" id="questionModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><form id="questionForm"><div class="modal-header"><div><span class="eyebrow">Pregunta personalizada</span><h3 class="modal-title" id="questionModalTitle">Nueva pregunta</h3></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="row g-3">
+  <input type="hidden" id="questionEditId">
+  <div class="col-12"><label class="form-label">Pregunta *</label><input id="questionText" class="form-control" required></div>
+  <div class="col-12"><label class="form-label">Ayuda / aclaración para el encuestador</label><input id="questionHelp" class="form-control" placeholder="Opcional. Ej. Seleccione todas las que correspondan."></div>
+  <div class="col-md-4"><label class="form-label">Módulo</label><select id="questionSection" class="form-select"><option value="context">1. Quién es</option><option value="journey">2. Su viaje</option><option value="experience">3. Qué le pareció</option><option value="opportunity">4. Qué le faltó</option><option value="extra" selected>5. Finalizar</option></select></div>
+  <div class="col-md-4"><label class="form-label">Tipo de respuesta</label><select id="questionType" class="form-select"><option value="single">Elegir una opción</option><option value="multi">Elegir varias opciones</option><option value="yesno">Sí / No</option><option value="scale">Puntaje de 0 a 10</option><option value="number">Número</option><option value="text">Respuesta escrita</option></select><div id="questionTypeHelp" class="field-explainer"></div></div>
+  <div class="col-md-4"><div class="form-check mt-4"><input id="questionRequired" class="form-check-input" type="checkbox"><label class="form-check-label" for="questionRequired">La persona debe responderla</label></div></div>
+  <div class="col-12" id="questionOptionsWrap"><label class="form-label">Respuestas disponibles</label><div id="questionOptionsEditor" class="choice-editor"></div><button id="questionAddOptionBtn" class="btn btn-outline-secondary btn-sm mt-2" type="button">+ Agregar respuesta</button><textarea id="questionOptions" class="d-none" aria-hidden="true"></textarea><div class="field-explainer">Escribí cada respuesta como la verá el encuestador. Podés renombrar, ordenar, agregar o retirar opciones. Si ya había datos, la aplicación conserva qué opción era cada una.</div><div id="questionIntegrityNote" class="method-note mt-2 d-none"></div></div>
+  <div class="col-md-8"><label class="form-label">Mostrar solo si pregunta…</label><select id="conditionQuestion" class="form-select"><option value="">Siempre visible</option></select></div>
+  <div class="col-md-4"><label class="form-label">Operador</label><select id="conditionOperator" class="form-select"><option value="equals">Es igual a</option><option value="contains">Contiene</option></select></div>
+  <div class="col-12"><label class="form-label">Respuesta que activa esta pregunta</label><input id="conditionValue" class="form-control"><select id="conditionValueSelect" class="form-select d-none"></select><div class="field-explainer">Si elegís una pregunta con opciones, vas a poder seleccionar la respuesta sin escribir códigos.</div></div>
+</div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Guardar pregunta</button></div></form></div></div></div>
+
+<!-- CORE QUESTION MODAL -->
+<div class="modal fade" id="coreQuestionModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><form id="coreQuestionForm"><div class="modal-header"><div><span class="eyebrow">Editar cuestionario</span><h3 class="modal-title">Editar pregunta</h3></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body">
+  <input type="hidden" id="coreQuestionKey">
+  <div class="edit-form-guide"><strong>No necesitás saber cómo está programada.</strong><span>Cambiá lo que ve el encuestador. El sistema mantiene por detrás la variable técnica necesaria para los indicadores cuando corresponde.</span></div>
+  <div class="row g-3">
+    <div class="col-12"><label class="form-label">Pregunta que verá el encuestador</label><input id="coreQuestionText" class="form-control" required></div>
+    <div class="col-12"><label class="form-label">Ayuda para quien encuesta <span class="plain-help">(opcional)</span></label><input id="coreQuestionHelp" class="form-control" placeholder="Ej. Puede elegir más de una opción."></div>
+    <div class="col-md-8"><label class="form-label">Nombre que aparecerá en resultados</label><input id="coreQuestionResultTitle" class="form-control"><div class="field-explainer">Por defecto se actualiza con la pregunta. Podés acortarlo si querés un título más cómodo para gráficos.</div></div>
+    <div class="col-md-4"><label class="form-label">Tipo de respuesta</label><input id="coreQuestionTypeLabel" class="form-control" disabled><div class="field-explainer">En preguntas base se mantiene para no romper indicadores.</div></div>
+    <div class="col-12 d-none" id="coreQuestionOptionsWrap"><label class="form-label">Respuestas disponibles</label><div id="coreOptionsEditor" class="choice-editor"></div><button id="coreAddOptionBtn" class="btn btn-outline-secondary btn-sm mt-2" type="button">+ Agregar respuesta</button><textarea id="coreQuestionOptions" class="d-none" aria-hidden="true"></textarea><div id="coreOptionsHelp" class="field-explainer"></div></div>
+    <div class="col-md-6"><div class="form-check"><input id="coreQuestionEnabled" class="form-check-input" type="checkbox"><label class="form-check-label" for="coreQuestionEnabled">Mostrar esta pregunta en este estudio</label></div></div>
+    <div class="col-md-6"><div class="form-check"><input id="coreQuestionRequired" class="form-check-input" type="checkbox"><label class="form-check-label" for="coreQuestionRequired">La persona debe responderla</label></div></div>
+  </div>
+  <div id="coreIndicatorNote" class="method-note mt-3"></div>
+</div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Guardar cambios</button></div></form></div></div></div>
+
+<!-- FIELD EVENT MODAL -->
+<div class="modal fade" id="eventModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="eventForm"><div class="modal-header"><h3 class="modal-title">Evento de campo</h3><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><label class="form-label">Resultado</label><select id="eventType" class="form-select mb-3"><option value="refused">Rechazo</option><option value="abandoned">Abandono</option><option value="not_eligible">No elegible</option></select><label class="form-label">Punto</label><input id="eventPoint" class="form-control mb-3" required><label class="form-label">Franja</label><select id="eventTimeBand" class="form-select"><option value="morning">Mañana</option><option value="afternoon">Tarde</option><option value="evening">Noche</option></select></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Guardar</button></div></form></div></div></div>
+
+<!-- COVERAGE MODAL -->
+<div class="modal fade" id="coverageModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="coverageForm"><div class="modal-header"><h3 class="modal-title">Meta de cobertura</h3><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><label class="form-label">Punto *</label><input id="coveragePoint" class="form-control mb-3" required><label class="form-label">Franja *</label><select id="coverageBand" class="form-select mb-3"><option value="morning">Mañana</option><option value="afternoon">Tarde</option><option value="evening">Noche</option><option value="all_day">Todo el día</option></select><label class="form-label">Objetivo de entrevistas *</label><input id="coverageTarget" type="number" min="1" class="form-control" value="100" required></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Guardar meta</button></div></form></div></div></div>
+
+<!-- USER MODAL -->
+<div class="modal fade" id="userModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="userForm"><div class="modal-header"><h3 class="modal-title">Agregar usuario</h3><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input id="newUserName" class="form-control mb-3" placeholder="Nombre" required><input id="newUserEmail" type="email" class="form-control mb-3" placeholder="Correo" required><select id="newUserRole" class="form-select mb-3"><option value="admin">Administrador</option><option value="analyst">Analista</option><option value="field">Encuestador</option></select><select id="newUserDestination" class="form-select"></select><div class="method-note mt-3">En producción esta acción invoca la Edge Function <code>admin-users</code>. La service_role nunca se expone en el navegador.</div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Crear / invitar</button></div></form></div></div></div>
+
+<script src="vendor/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
+<script src="vendor/chart-fallback.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body>
+</html>
