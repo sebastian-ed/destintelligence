@@ -1,93 +1,75 @@
-# Destintelligence V5.5 Simple · Junín de los Andes
+# Destintelligence V5.6 Simple · Junín de los Andes
 
-Aplicación de inteligencia turística orientada a equipos municipales. La interfaz prioriza tres tareas: crear/preparar un estudio, registrar entrevistas y ver resultados. La metodología, los controles de calidad, la edición del cuestionario, la importación histórica, la segmentación y los hallazgos automáticos siguen disponibles sin recargar la operación diaria.
+Aplicación de inteligencia turística para equipos municipales. La operación diaria sigue siendo simple: preparar el estudio, registrar entrevistas y revisar resultados. La metodología, la calidad de campo, el análisis y la administración quedan disponibles sin recargar la interfaz.
 
-## Probar la demo
+## Supabase ya conectado
 
-1. Abrí `index.html`.
-2. Tocá **Abrir demo Junín de los Andes**.
-3. La demo usa datos ficticios y no necesita Supabase.
+Esta entrega ya incluye en `config.js` el proyecto indicado:
 
-También podés abrir directamente `DEMO-DESTINTELLIGENCE-JUNIN-DE-LOS-ANDES.html`.
+- Proyecto: `dnnlbqnppxlmstneawrw`
+- URL: `https://dnnlbqnppxlmstneawrw.supabase.co`
+- Clave: publishable/public key
 
-## Instalación nueva en Supabase — un solo SQL
+La clave incluida es pública. **Nunca agregues la `service_role` al navegador.**
 
-No uses migraciones antiguas. Esta versión incluye únicamente:
+## Base de datos
+
+Si ya ejecutaste `SUPABASE-INSTALACION-COMPLETA.sql` en la versión anterior, **no vuelvas a ejecutarlo**.
+
+Para una instalación completamente nueva, el archivo consolidado sigue siendo:
 
 `SUPABASE-INSTALACION-COMPLETA.sql`
 
-Ese archivo ya contiene el esquema final de Destintelligence V5.5, incluidas las variables agregadas en V5.2.
+## Gestión de usuarios
 
-### Paso 1 · Crear el primer usuario
+V5.6 permite desde la pantalla **Usuarios**:
 
-En tu proyecto de Supabase, creá un único usuario inicial en Authentication. Ese usuario será el administrador/owner inicial.
+- agregar o invitar usuarios;
+- reconocer un correo que ya existe en Supabase Auth y darle acceso sin duplicarlo;
+- editar nombre, correo, rol y destino;
+- habilitar y deshabilitar accesos;
+- eliminar usuarios;
+- impedir que un administrador modifique al responsable principal;
+- impedir que se elimine/deshabilite el último responsable principal;
+- impedir que una persona se elimine a sí misma accidentalmente.
 
-### Paso 2 · Ejecutar el único SQL
-
-Abrí SQL Editor, copiá todo el contenido de `SUPABASE-INSTALACION-COMPLETA.sql` y ejecutalo.
-
-Si existe un solo usuario en Authentication, el SQL lo detecta automáticamente y crea/configura:
-
-- organización: Municipalidad de Junín de los Andes;
-- destino: Junín de los Andes · Neuquén;
-- membresía del primer usuario como `owner`;
-- marca institucional inicial;
-- estudio inicial de demanda turística listo para comenzar;
-- todas las tablas, índices, políticas RLS y bucket de branding.
-
-Si el proyecto ya tiene más de un usuario, el propio SQL explica dónde indicar el email del administrador.
-
-### Paso 3 · Conectar la web
-
-Editá solamente `config.js` y reemplazá:
-
-```js
-SUPABASE_URL: "https://TU-PROYECTO.supabase.co",
-SUPABASE_ANON_KEY: "TU-ANON-KEY"
-```
-
-No necesitás editar `app.js` ni `public.js`: ambos leen la misma configuración.
-
-### Paso 4 · Publicar la app
-
-Subí la carpeta a tu hosting/GitHub Pages. `index.html` es la aplicación principal y `public.html` es el dashboard público.
-
-## Usuarios adicionales
-
-La pantalla Usuarios utiliza la Edge Function incluida en:
+Estas operaciones de Auth deben ejecutarse en servidor. Por seguridad usan la Edge Function:
 
 `supabase/functions/admin-users/index.ts`
 
-La base y el primer administrador funcionan sin desplegar esta función. Solo necesitás desplegarla cuando quieras crear/invitar usuarios desde la propia aplicación.
+## Activar la gestión de usuarios una sola vez
 
-## Archivos que ya no necesitás
+La app web ya está lista, pero la Edge Function debe publicarse en tu proyecto Supabase.
 
-Esta instalación nueva NO requiere:
+### Opción A · Supabase Dashboard
 
-- `supabase-v3.sql`
-- `supabase-v4.sql`
-- migraciones V3 → V4
-- migraciones V4.1 → V4.2
-- migraciones V4.2 → V4.3
-- migración V5.1 → V5.2
+1. Entrá a tu proyecto Supabase.
+2. Abrí **Edge Functions**.
+3. Creá/desplegá una función llamada exactamente `admin-users`.
+4. Usá el contenido de `supabase/functions/admin-users/index.ts`.
+5. Desactivá la verificación JWT del gateway para esta función (`verify_jwt = false`). La propia función valida la sesión del usuario y sus permisos antes de hacer cualquier cambio.
 
-Todo quedó consolidado en `SUPABASE-INSTALACION-COMPLETA.sql`.
+### Opción B · Supabase CLI
 
+Desde esta carpeta:
 
+```bash
+npx supabase login
+npx supabase link --project-ref dnnlbqnppxlmstneawrw
+npx supabase functions deploy admin-users --no-verify-jwt
+```
 
-## Si el usuario existe pero aparece “sin organización activa”
+También podés usar `DESPLEGAR-FUNCION-USUARIOS.ps1` en Windows.
 
-Eso significa que el usuario está en Supabase Authentication, pero todavía no está vinculado a `organization_members`. Ejecutá una sola vez `REPARAR-ACCESO-USUARIO.sql` desde **Supabase > SQL Editor** y después volvé a iniciar sesión. La V5.5 intentará completar automáticamente la inicialización sólo si la instalación todavía no tiene ningún miembro activo.
+## Recuperación de contraseña
 
-## V5.5 · conexión y recuperación de contraseña
+En **Supabase → Authentication → URL Configuration** mantené:
 
-`index.html` y `public.html` cargan `config.js` automáticamente antes de iniciar Supabase. En versiones anteriores el archivo existía pero no era incluido por la página, por lo que la app podía mostrar el aviso de configuración aun con credenciales correctas.
+- Site URL: `https://sebastian-ed.github.io/destintelligence/`
+- Redirect URL: `https://sebastian-ed.github.io/destintelligence/`
 
-Para GitHub Pages, después de publicar la app, configurá en Supabase **Authentication → URL Configuration**:
+El login incluye **¿Olvidaste tu contraseña?** y el flujo para elegir una contraseña nueva.
 
-- **Site URL:** `https://TU-USUARIO.github.io/TU-REPOSITORIO/`
-- **Redirect URLs:** agregá exactamente la misma URL.
+## Publicar en GitHub Pages
 
-En este proyecto, si el repositorio se llama `destintelligence`, el formato será `https://TU-USUARIO.github.io/destintelligence/`.
-
-La recuperación funciona así: el usuario toca **¿Olvidaste tu contraseña?**, escribe su correo, Supabase envía el email, el enlace vuelve a la app y Destintelligence muestra el formulario para elegir una nueva contraseña.
+Reemplazá los archivos de la versión anterior por los de esta carpeta. Los scripts llevan versión `5.6.0` para reducir problemas de caché.

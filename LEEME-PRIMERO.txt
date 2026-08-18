@@ -1,23 +1,20 @@
-DESTINTELLIGENCE · JUNÍN DE LOS ANDES
+DESTINTELLIGENCE V5.6 · JUNÍN DE LOS ANDES
 
-PARA PROBAR
-1. Abrí index.html.
-2. Tocá “Abrir demo Junín de los Andes”.
+TU PROYECTO SUPABASE YA ESTÁ CONFIGURADO EN config.js.
 
-PARA USAR CON SUPABASE DESDE CERO
-1. Creá un proyecto Supabase.
-2. En Authentication, creá UN primer usuario.
-3. Ejecutá SOLO: SUPABASE-INSTALACION-COMPLETA.sql
-4. Abrí config.js y pegá la URL y la ANON KEY de tu proyecto.
-5. Publicá la carpeta.
+Si la base ya funciona:
+1. Reemplazá los archivos de GitHub por los de esta versión.
+2. NO vuelvas a ejecutar el SQL completo.
+3. Activá una sola vez la Edge Function admin-users para poder gestionar usuarios.
 
-NO ejecutes migraciones viejas. No hacen falta.
+Comandos rápidos:
+  npx supabase login
+  npx supabase link --project-ref dnnlbqnppxlmstneawrw
+  npx supabase functions deploy admin-users --no-verify-jwt
 
-El SQL único crea la estructura completa, vincula automáticamente al primer usuario como administrador y deja un estudio inicial de Junín de los Andes listo para empezar.
+Después vas a poder Agregar, Editar, Habilitar/Deshabilitar y Eliminar usuarios desde la propia app.
 
+Si fuera una instalación completamente nueva, recién ahí usá:
+  SUPABASE-INSTALACION-COMPLETA.sql
 
-IMPORTANTE V5.5 - GITHUB PAGES Y RECUPERACION DE CONTRASEÑA
-1. Configurá config.js con SUPABASE_URL y SUPABASE_ANON_KEY (o publishable key).
-2. Subí config.js al mismo nivel que index.html.
-3. En Supabase > Authentication > URL Configuration, configurá la URL pública de GitHub Pages como Site URL y agregala también a Redirect URLs.
-4. No uses nunca la service_role en config.js.
+Nunca pongas la service_role en config.js.

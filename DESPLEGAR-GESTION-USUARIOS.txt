@@ -1,0 +1,18 @@
+¿POR QUÉ APARECÍA “FAILED TO SEND A REQUEST TO THE EDGE FUNCTION”? 
+
+La pantalla Usuarios necesita una pequeña función segura del lado de Supabase para crear, editar o eliminar cuentas de Authentication. La web no puede llevar una service_role porque sería inseguro.
+
+La función ya viene incluida en esta entrega, pero hay que publicarla una sola vez en Supabase.
+
+FUNCIÓN:
+  supabase/functions/admin-users/index.ts
+
+PROYECTO:
+  dnnlbqnppxlmstneawrw
+
+COMANDOS:
+  npx supabase login
+  npx supabase link --project-ref dnnlbqnppxlmstneawrw
+  npx supabase functions deploy admin-users --no-verify-jwt
+
+Una vez desplegada, no tenés que repetir este paso cada vez que agregues usuarios.

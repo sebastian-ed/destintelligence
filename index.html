@@ -255,8 +255,11 @@
 </section>
 
 <section id="view-users" class="app-view d-none">
-  <div class="page-heading"><div><span class="eyebrow">Gobernanza</span><h2>Usuarios</h2><p>Roles por organización y destino.</p></div><button class="btn btn-primary" data-modal="userModal">Agregar usuario</button></div>
-  <div class="panel"><div class="table-responsive"><table class="table"><thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Destino</th><th>Estado</th></tr></thead><tbody id="usersTable"></tbody></table></div></div>
+  <div class="page-heading"><div><span class="eyebrow">Gobernanza</span><h2>Usuarios</h2><p>Agregá personas, cambiá sus permisos o quitá el acceso cuando lo necesites.</p></div><button id="addUserBtn" class="btn btn-primary">Agregar usuario</button></div>
+  <div class="panel">
+    <div class="method-note mb-3"><strong>Roles simples:</strong> Administrador gestiona la plataforma; Analista consulta y trabaja con estudios; Encuestador registra entrevistas.</div>
+    <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Destino</th><th>Estado</th><th class="text-end">Acciones</th></tr></thead><tbody id="usersTable"></tbody></table></div>
+  </div>
 </section>
 
 <section id="view-branding" class="app-view d-none">
@@ -405,7 +408,18 @@
 <div class="modal fade" id="coverageModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="coverageForm"><div class="modal-header"><h3 class="modal-title">Meta de cobertura</h3><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><label class="form-label">Punto *</label><input id="coveragePoint" class="form-control mb-3" required><label class="form-label">Franja *</label><select id="coverageBand" class="form-select mb-3"><option value="morning">Mañana</option><option value="afternoon">Tarde</option><option value="evening">Noche</option><option value="all_day">Todo el día</option></select><label class="form-label">Objetivo de entrevistas *</label><input id="coverageTarget" type="number" min="1" class="form-control" value="100" required></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Guardar meta</button></div></form></div></div></div>
 
 <!-- USER MODAL -->
-<div class="modal fade" id="userModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="userForm"><div class="modal-header"><h3 class="modal-title">Agregar usuario</h3><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input id="newUserName" class="form-control mb-3" placeholder="Nombre" required><input id="newUserEmail" type="email" class="form-control mb-3" placeholder="Correo" required><select id="newUserRole" class="form-select mb-3"><option value="admin">Administrador</option><option value="analyst">Analista</option><option value="field">Encuestador</option></select><select id="newUserDestination" class="form-select"></select><div class="method-note mt-3">En producción esta acción invoca la Edge Function <code>admin-users</code>. La service_role nunca se expone en el navegador.</div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Crear / invitar</button></div></form></div></div></div>
+<div class="modal fade" id="userModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="userForm">
+  <input id="editUserId" type="hidden">
+  <div class="modal-header"><div><span class="eyebrow">Accesos</span><h3 class="modal-title" id="userModalTitle">Agregar usuario</h3></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+  <div class="modal-body">
+    <label class="form-label">Nombre</label><input id="newUserName" class="form-control mb-3" placeholder="Nombre y apellido" required>
+    <label class="form-label">Correo</label><input id="newUserEmail" type="email" class="form-control mb-3" placeholder="correo@municipio.gob.ar" required>
+    <label class="form-label">Rol</label><select id="newUserRole" class="form-select mb-3"><option value="owner">Responsable principal</option><option value="admin">Administrador</option><option value="analyst">Analista</option><option value="field">Encuestador</option></select>
+    <label class="form-label">Destino</label><select id="newUserDestination" class="form-select"></select>
+    <div class="method-note mt-3" id="userModalHelp">Si el correo todavía no existe, recibirá una invitación. Si ya tiene una cuenta, se le dará acceso directamente.</div>
+  </div>
+  <div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button id="userSubmitBtn" class="btn btn-primary">Crear / invitar</button></div>
+</form></div></div></div>
 
 <!-- PASSWORD RECOVERY MODALS -->
 <div class="modal fade" id="passwordResetRequestModal" tabindex="-1" aria-hidden="true">
@@ -442,8 +456,8 @@
 <script src="vendor/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
 <script src="vendor/chart-fallback.js"></script>
-<script src="config.js?v=5.5.0"></script>
+<script src="config.js?v=5.6.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js?v=5.5.0"></script>
+<script src="app.js?v=5.6.0"></script>
 </body>
 </html>

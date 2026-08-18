@@ -1,0 +1,22 @@
+DESTINTELLIGENCE V5.5 -> V5.6
+
+1) Reemplazá en GitHub los archivos de la app por los de V5.6.
+2) NO vuelvas a ejecutar el SQL completo si tu base ya funciona.
+3) Tus URL públicas de Supabase ya están incluidas en config.js.
+4) Desplegá una sola vez la Edge Function admin-users incluida en:
+   supabase/functions/admin-users/index.ts
+
+Con Supabase CLI:
+  npx supabase login
+  npx supabase link --project-ref dnnlbqnppxlmstneawrw
+  npx supabase functions deploy admin-users --no-verify-jwt
+
+Después recargá GitHub Pages con Ctrl+F5.
+
+La nueva pantalla Usuarios permite:
+- Agregar / invitar
+- Editar
+- Habilitar / deshabilitar
+- Eliminar
+
+No hace falta modificar la base de datos para estas funciones.
