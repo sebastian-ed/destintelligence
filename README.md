@@ -111,3 +111,13 @@ En **Supabase → Authentication → URL Configuration** usá:
 - **JSON:** estudios y backups completos.
 
 Las librerías de Excel/PDF se cargan desde CDN; si no estuvieran disponibles, la app conserva alternativas de exportación cuando es posible.
+
+## Licencias y derechos
+
+Destintelligence separa los derechos sobre sus contenidos metodológicos del software:
+
+- **Cuestionarios, textos, metodología y documentación originales:** CC BY-NC-SA 4.0.
+- **Código fuente, scripts, estilos, configuración y componentes propios:** © 2026 Sebastián E. Portillo. Todos los derechos reservados.
+- **Datos, entrevistas, contenidos de organizaciones usuarias, marcas y materiales de terceros:** excluidos de la licencia Creative Commons salvo que corresponda otra licencia específica.
+
+Ver `licencia.html`, `LICENSE.md` y `THIRD-PARTY-NOTICES.md` para el alcance completo.
