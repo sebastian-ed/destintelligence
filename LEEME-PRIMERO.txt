@@ -1,0 +1,29 @@
+DESTINTELLIGENCE V5.8 · GESTIÓN Y AUDITORÍA
+===========================================
+
+SI YA TENÉS V5.7 FUNCIONANDO:
+1. Ejecutá ACTUALIZAR-GESTION-AUDITORIA-V5.8.sql en Supabase > SQL Editor.
+2. Volvé a desplegar la función admin-users.
+3. Reemplazá los archivos de GitHub por los de V5.8.
+4. Esperá GitHub Pages y hacé Ctrl + F5.
+
+NO ejecutes nuevamente SUPABASE-INSTALACION-COMPLETA.sql sobre una base ya funcionando.
+
+SI ES UNA INSTALACIÓN NUEVA:
+Ejecutá solamente SUPABASE-INSTALACION-COMPLETA.sql.
+
+La URL y la publishable key de tu proyecto ya están en config.js.
+
+NUEVO: GESTIÓN DE DATOS
+- Abrir y corregir entrevistas individuales.
+- Encuestadores: sólo pueden corregir entrevistas propias y deben indicar motivo.
+- Seleccionar una, varias o todas las entrevistas filtradas.
+- Descargar CSV, Excel y PDF.
+- Editar, archivar, reactivar, respaldar y eliminar estudios.
+- Eliminar preguntas personalizadas con confirmación fuerte.
+- Historial con usuario, fecha/hora, motivo y antes/después.
+- Backup completo de la organización.
+
+SEGURIDAD DE BORRADO:
+Toda eliminación definitiva exige un motivo y escribir exactamente ELIMINAR.
+Archivar es preferible a eliminar un estudio terminado.

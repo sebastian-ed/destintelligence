@@ -1,0 +1,21 @@
+DESTINTELLIGENCE V5.8.1 · LICENCIAS Y DERECHOS
+
+Cambios incluidos
+- Footer legal visible en la pantalla de acceso.
+- Footer legal visible dentro de la aplicación.
+- Footer legal permanente en el dashboard público, separado del pie institucional configurable.
+- Nueva página licencia.html con alcance, atribución, exclusiones, datos de organizaciones usuarias y terceros.
+- Nuevo LICENSE.md para documentar derechos en el repositorio.
+- Nuevo THIRD-PARTY-NOTICES.md con los principales componentes de terceros identificados.
+- README actualizado con el esquema de licencias.
+- Demo HTML autónoma actualizada con el mismo footer legal.
+
+Esquema aplicado
+- Cuestionarios, textos, metodología y documentación originales de Destintelligence: CC BY-NC-SA 4.0.
+- Código fuente y componentes propios: Copyright © 2026 Sebastián E. Portillo. Todos los derechos reservados.
+- Datos, entrevistas, materiales aportados por organizaciones usuarias, marcas y componentes de terceros: excluidos de la licencia Creative Commons salvo licencia específica.
+
+Despliegue
+- Reemplazar/subir los archivos de esta carpeta al repositorio de Destintelligence.
+- No requiere cambios de base de datos.
+- No requiere ejecutar SQL ni volver a desplegar la Edge Function.
