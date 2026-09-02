@@ -1,0 +1,17 @@
+{
+  "release": "Santa Fe fix",
+  "date": "2026-09-01",
+  "production_db_migration": "MIGRAR-PRODUCCION-A-SANTA-FE.sql",
+  "one_click_source_patcher": "APLICAR-FIX-SANTA-FE.ps1",
+  "obsolete_files_removed_by_patcher": [
+    "DEMO-DESTINTELLIGENCE-JUNIN-DE-LOS-ANDES.html",
+    "destintelligence.rar",
+    "ACTUALIZAR-DESDE-V5.7.txt",
+    "ACTUALIZAR-GESTION-AUDITORIA-V5.8.sql",
+    "ACTUALIZAR-PERMISOS-V5.7.sql",
+    "CAMBIOS-LICENCIA-V5.8.1.txt",
+    "DESPLEGAR-GESTION-USUARIOS.txt",
+    "REPARAR-ACCESO-USUARIO.sql"
+  ],
+  "data_policy": "No deletes production interviews or visitor records."
+}

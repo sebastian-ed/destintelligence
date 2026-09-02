@@ -1,0 +1,67 @@
+DESTINTELLIGENCE · FIX SANTA FE
+================================
+
+Qué corrige
+-----------
+1. Corrige referencias activas de "Junín de los Andes" a "Santa Fe" en el frontend.
+2. Corrige el bootstrap de Supabase para que una instalación/autoalta nueva no vuelva a crear Junín.
+3. Incluye una migración segura para la base de PRODUCCIÓN existente.
+4. Elimina únicamente archivos históricos/duplicados identificados como prescindibles.
+5. No borra entrevistas ni registros históricos de la base.
+
+Por qué producción seguía mostrando Junín
+-----------------------------------------
+El problema tiene dos capas:
+- El frontend/repositorio conservaba referencias y semillas de Junín.
+- La función de Supabase ensure_destintelligence_initial_owner() y el SQL de instalación
+  también tenían Junín de los Andes / Neuquén hardcodeados.
+
+Cambiar sólo el HTML de la demo no corrige el destino ya persistido en Supabase.
+
+Uso
+---
+A) Sobre una copia de tu proyecto:
+   1. Copiá APLICAR-FIX-SANTA-FE.ps1 y MIGRAR-PRODUCCION-A-SANTA-FE.sql
+      a la carpeta raíz del proyecto.
+   2. Abrí PowerShell en esa carpeta.
+   3. Ejecutá:
+         powershell -ExecutionPolicy Bypass -File .\APLICAR-FIX-SANTA-FE.ps1 -ProjectPath .
+   4. Se generará automáticamente un ZIP "...-SANTA-FE-LIMPIO.zip".
+
+B) Producción / Supabase:
+   1. Abrí Supabase > SQL Editor.
+   2. Ejecutá UNA VEZ MIGRAR-PRODUCCION-A-SANTA-FE.sql.
+   3. Volvé a desplegar los archivos del ZIP limpio.
+   4. Hacé Ctrl+F5 al probar producción.
+
+Archivos históricos que el limpiador elimina
+---------------------------------------------
+- DEMO-DESTINTELLIGENCE-JUNIN-DE-LOS-ANDES.html
+- destintelligence.rar
+- ACTUALIZAR-DESDE-V5.7.txt
+- ACTUALIZAR-GESTION-AUDITORIA-V5.8.sql
+- ACTUALIZAR-PERMISOS-V5.7.sql
+- CAMBIOS-LICENCIA-V5.8.1.txt
+- DESPLEGAR-GESTION-USUARIOS.txt
+- REPARAR-ACCESO-USUARIO.sql
+
+Se mantienen los archivos operativos actuales, incluyendo:
+- index.html
+- app.js
+- styles.css
+- config.js
+- management-v5.8.js
+- public.html / public.js
+- licencia.html
+- LICENSE.md
+- THIRD-PARTY-NOTICES.md
+- SUPABASE-INSTALACION-COMPLETA.sql
+- supabase/
+- vendor/
+- DESPLEGAR-FUNCION-USUARIOS.ps1
+
+Nota
+----
+Este paquete fue preparado como parche autocontenido porque el archivo RAR adjunto no
+quedó montado en el runtime de archivos de esta sesión. El script aplica el cambio de
+forma conservadora sobre el proyecto real y genera el ZIP limpio automáticamente.
