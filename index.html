@@ -38,7 +38,7 @@
     <div><span class="eyebrow light">Simple para usar · serio para decidir</span><h3>Tres tareas. Todo lo demás lo hace el sistema.</h3></div>
     <div class="side-grid">
       <div><b>1. Preparar</b><span>Elegís qué querés preguntar. La app propone una base lista para usar.</span></div>
-      <div><b>2. Registrar</b><span>El encuestador sigue pasos simples y guarda cada entrevista.</span></div>
+      <div><b>2. Registrar</b><span>El encuestador sigue pasos simples y guarda cada encuesta.</span></div>
       <div><b>3. Entender</b><span>Los resultados se ordenan automáticamente en gráficos y oportunidades.</span></div>
       <div><b>Por detrás</b><span>Se conservan muestra, bases válidas, trazabilidad y controles de calidad.</span></div>
     </div>
@@ -62,11 +62,11 @@
   <nav class="nav flex-column simple-nav">
     <div class="nav-section-label">Trabajo diario</div>
     <button class="nav-link active" data-view="overview"><span class="nav-num">1</span><span><b>Inicio</b><small>Qué hacer ahora</small></span></button>
-    <button class="nav-link nav-action-primary" data-modal="surveyModal"><span class="nav-plus">+</span><span><b>Registrar entrevista</b><small>Cargar un visitante</small></span></button>
+    <button class="nav-link nav-action-primary" data-modal="surveyModal"><span class="nav-plus">+</span><span><b>Registrar encuesta</b><small>Cargar un visitante</small></span></button>
     <button class="nav-link" data-view="studies"><span class="nav-num">2</span><span><b>Preparar estudio</b><small>Objetivo y período</small></span></button>
     <button class="nav-link" data-view="forms"><span class="nav-num">3</span><span><b>Preguntas</b><small>Revisar o cambiar</small></span></button>
     <button class="nav-link" data-view="demand"><span class="nav-num">4</span><span><b>Resultados</b><small>Qué dicen los datos</small></span></button>
-    <button class="nav-link" id="managementNavBtn" data-view="management"><span class="nav-num">5</span><span><b>Gestión de datos</b><small>Entrevistas e historial</small></span></button>
+    <button class="nav-link" id="managementNavBtn" data-view="management"><span class="nav-num">5</span><span><b>Gestión de datos</b><small>Encuestas e historial</small></span></button>
     <details class="advanced-nav">
       <summary>Más herramientas</summary>
       <button class="nav-link" data-view="field">Calidad del relevamiento</button>
@@ -88,18 +88,18 @@
     <div><span class="eyebrow">Inicio</span><h2 id="overviewTitle">¿Qué querés hacer?</h2><p>Elegí una tarea. La plataforma te guía sin pedirte conocimientos técnicos.</p></div>
   </div>
   <div class="workflow-grid">
-    <button class="workflow-card primary" data-modal="surveyModal"><span class="workflow-step">1</span><span><strong>Registrar una entrevista</strong><small>Usá el cuestionario y guardá un visitante.</small></span><span class="workflow-arrow">→</span></button>
+    <button class="workflow-card primary" data-modal="surveyModal"><span class="workflow-step">1</span><span><strong>Registrar una encuesta</strong><small>Usá el cuestionario y guardá un visitante.</small></span><span class="workflow-arrow">→</span></button>
     <button class="workflow-card" data-view="forms"><span class="workflow-step">2</span><span><strong>Revisar las preguntas</strong><small>Podés usar las sugeridas o cambiarlas.</small></span><span class="workflow-arrow">→</span></button>
     <button class="workflow-card" data-view="demand"><span class="workflow-step">3</span><span><strong>Ver resultados</strong><small>Gráficos y conclusiones se actualizan solos.</small></span><span class="workflow-arrow">→</span></button>
   </div>
   <div class="simple-study-strip">
     <div><span>Estudio que estás usando</span><strong id="simpleStudyName">—</strong></div>
-    <div><span>Entrevistas cargadas</span><strong id="simpleStudyProgress">—</strong></div>
+    <div><span>Encuestas cargadas</span><strong id="simpleStudyProgress">—</strong></div>
     <button class="btn btn-outline-secondary btn-sm" data-view="studies">Cambiar estudio</button>
   </div>
-  <div class="section-heading-simple"><div><span class="eyebrow">Resumen automático</span><h3>Así viene el estudio</h3></div><span>Estos números se actualizan con cada entrevista.</span></div>
+  <div class="section-heading-simple"><div><span class="eyebrow">Resumen automático</span><h3>Así viene el estudio</h3></div><span>Estos números se actualizan con cada encuesta.</span></div>
   <div class="kpi-grid six">
-    <article class="kpi-card"><span>Entrevistas</span><strong id="kpiVisitors">0</strong><small id="kpiTarget">Estudio activo</small></article>
+    <article class="kpi-card"><span>Encuestas</span><strong id="kpiVisitors">0</strong><small id="kpiTarget">Estudio activo</small></article>
     <article class="kpi-card"><span>Pernoctan</span><strong id="kpiOvernight">—</strong><small id="kpiOvernightBase">Base —</small></article>
     <article class="kpi-card"><span>Estadía media</span><strong id="kpiNights">—</strong><small>Noches · base válida</small></article>
     <article class="kpi-card"><span>Gasto diario</span><strong id="kpiSpend">—</strong><small id="kpiSpendBase">Base —</small></article>
@@ -116,26 +116,26 @@
 
 <section id="view-field" class="app-view d-none">
   <div class="page-heading">
-    <div><span class="eyebrow">Control opcional</span><h2>Calidad del relevamiento</h2><p>Sirve para comprobar si estamos relevando de forma ordenada. No hace falta entrar acá para cargar entrevistas.</p></div>
-    <div class="actions"><button class="btn btn-outline-secondary" data-modal="eventModal">Registrar evento</button><button class="btn btn-outline-secondary" data-modal="coverageModal">Agregar meta</button><button class="btn btn-primary" data-modal="surveyModal">Nueva entrevista</button></div>
+    <div><span class="eyebrow">Control opcional</span><h2>Calidad del relevamiento</h2><p>Sirve para comprobar si estamos relevando de forma ordenada. No hace falta entrar acá para cargar encuestas.</p></div>
+    <div class="actions"><button class="btn btn-outline-secondary" data-modal="eventModal">Registrar evento</button><button class="btn btn-outline-secondary" data-modal="coverageModal">Agregar meta</button><button class="btn btn-primary" data-modal="surveyModal">Nueva encuesta</button></div>
   </div>
   <div class="field-grid">
     <article class="panel"><span>Muestra</span><div class="big-stat"><strong id="fieldN">0</strong><em id="fieldTarget">/0</em></div><div class="progress"><div id="fieldBar" class="progress-bar"></div></div></article>
     <article class="panel"><span>Tasa de respuesta</span><div class="big-stat"><strong id="responseRate">—</strong></div><small id="responseBase">—</small></article>
-    <article class="panel"><span>GPS capturado</span><div class="big-stat"><strong id="gpsRate">—</strong></div><small>Entrevistas de campo</small></article>
+    <article class="panel"><span>GPS capturado</span><div class="big-stat"><strong id="gpsRate">—</strong></div><small>Encuestas de campo</small></article>
     <article class="panel"><span>Duración mediana</span><div class="big-stat"><strong id="durationMedian">—</strong></div><small>Control de speeders</small></article>
   </div>
   <div class="dashboard-grid mt-3">
     <article class="panel wide"><div class="panel-head"><div><h3>Plan de cobertura</h3><p>Metas por punto y franja. Mejoran el campo; no son ponderadores.</p></div></div><div id="coverageGrid" class="coverage-grid"></div></article>
     <article class="panel"><div class="panel-head"><div><h3>Alertas de calidad</h3><p>Controles automáticos.</p></div></div><div id="qualityAlerts"></div></article>
   </div>
-  <article class="panel mt-3"><div class="panel-head"><div><h3>Últimas entrevistas</h3><p>Incluye visitante, punto, duración y precisión GPS.</p></div><button id="exportCsvBtn" class="btn btn-outline-secondary btn-sm">Exportar CSV</button></div>
+  <article class="panel mt-3"><div class="panel-head"><div><h3>Últimas encuestas</h3><p>Incluye visitante, punto, duración y precisión GPS.</p></div><button id="exportCsvBtn" class="btn btn-outline-secondary btn-sm">Exportar CSV</button></div>
     <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Fecha</th><th>Encuestador</th><th>Punto</th><th>Tipo</th><th>Origen</th><th>Duración</th><th>GPS</th></tr></thead><tbody id="surveyTable"></tbody></table></div>
   </article>
 </section>
 
 <section id="view-studies" class="app-view d-none">
-  <div class="page-heading"><div><span class="eyebrow">Paso 1</span><h2>Preparar el estudio</h2><p>Definí qué período vas a medir y cuántas entrevistas querés hacer. La configuración técnica queda prearmada.</p></div><button class="btn btn-primary" data-modal="studyModal">Empezar estudio</button></div>
+  <div class="page-heading"><div><span class="eyebrow">Paso 1</span><h2>Preparar el estudio</h2><p>Definí qué período vas a medir y cuántas encuestas querés hacer. La configuración técnica queda prearmada.</p></div><button class="btn btn-primary" data-modal="studyModal">Empezar estudio</button></div>
   <div class="active-row"><label>Estudio activo</label><select id="activeStudySelect" class="form-select"></select></div>
   <div id="studiesGrid" class="card-grid"></div>
 </section>
@@ -262,12 +262,12 @@
 
 <section id="view-management" class="app-view d-none">
   <div class="page-heading">
-    <div><span class="eyebrow">Trazabilidad y control</span><h2 id="managementTitle">Gestión de datos</h2><p id="managementSubtitle">Revisá entrevistas, administrá estudios, consultá el historial y descargá respaldos.</p></div>
+    <div><span class="eyebrow">Trazabilidad y control</span><h2 id="managementTitle">Gestión de datos</h2><p id="managementSubtitle">Revisá encuestas, administrá estudios, consultá el historial y descargá respaldos.</p></div>
     <div class="actions"><button id="mgmtRefreshBtn" class="btn btn-outline-secondary" type="button">Actualizar</button><button id="mgmtBackupTopBtn" class="btn btn-primary" type="button" data-upper-only>Descargar backup</button></div>
   </div>
 
   <div class="mgmt-tabs">
-    <button class="active" type="button" data-mgmt-tab="interviews">Entrevistas</button>
+    <button class="active" type="button" data-mgmt-tab="interviews">Encuestas</button>
     <button type="button" data-mgmt-tab="studies" data-mgmt-admin>Estudios</button>
     <button type="button" data-mgmt-tab="audit" data-mgmt-admin>Historial</button>
     <button type="button" data-mgmt-tab="backup" data-mgmt-admin>Backups</button>
@@ -275,7 +275,7 @@
 
   <div data-mgmt-pane="interviews">
     <article class="panel">
-      <div class="panel-head"><div><h3>Entrevistas / cuestionarios cargados</h3><p>Podés abrir cada registro, corregirlo y, según tu rol, trabajar con uno, varios o todos.</p></div></div>
+      <div class="panel-head"><div><h3>Encuestas / cuestionarios cargados</h3><p>Podés abrir cada registro, corregirlo y, según tu rol, trabajar con uno, varios o todos.</p></div></div>
       <div class="mgmt-filterbar">
         <select id="mgmtInterviewStudy" class="form-select"><option value="">Todos los estudios</option></select>
         <input id="mgmtInterviewSearch" class="form-control" placeholder="Buscar por lugar, origen, estudio o encuestador">
@@ -309,16 +309,16 @@
   <div class="d-none" data-mgmt-pane="audit" data-mgmt-admin>
     <article class="panel">
       <div class="panel-head"><div><h3>Historial de movimientos</h3><p>Quién hizo qué, cuándo, por qué y qué información cambió.</p></div><button id="auditReloadBtn" class="btn btn-outline-secondary btn-sm" type="button">Actualizar historial</button></div>
-      <div class="mgmt-filterbar"><select id="auditEntityFilter" class="form-select"><option value="">Todos los movimientos</option><option value="interview">Entrevistas</option><option value="study">Estudios</option><option value="question">Preguntas</option><option value="user">Usuarios</option><option value="field_event">Eventos de campo</option><option value="coverage">Cobertura</option><option value="branding">Marca</option><option value="snapshot">Publicaciones</option><option value="backup">Exportaciones / backups</option></select><input id="auditSearch" class="form-control" placeholder="Buscar usuario, acción o motivo"><div></div></div>
+      <div class="mgmt-filterbar"><select id="auditEntityFilter" class="form-select"><option value="">Todos los movimientos</option><option value="interview">Encuestas</option><option value="study">Estudios</option><option value="question">Preguntas</option><option value="user">Usuarios</option><option value="field_event">Eventos de campo</option><option value="coverage">Cobertura</option><option value="branding">Marca</option><option value="snapshot">Publicaciones</option><option value="backup">Exportaciones / backups</option></select><input id="auditSearch" class="form-control" placeholder="Buscar usuario, acción o motivo"><div></div></div>
       <div class="table-responsive mgmt-table-wrap"><table class="table align-middle mgmt-table"><thead><tr><th>Fecha y hora</th><th>Usuario</th><th>Acción</th><th>Elemento</th><th>Motivo</th><th></th></tr></thead><tbody id="auditRows"></tbody></table></div>
     </article>
   </div>
 
   <div class="d-none" data-mgmt-pane="backup" data-mgmt-admin>
     <div class="backup-grid">
-      <article class="panel"><span class="eyebrow">Respaldo completo</span><h3>Backup de la organización</h3><p>Descarga estudios, preguntas, entrevistas, cobertura, usuarios, publicaciones, marca e historial en un único archivo JSON.</p><button id="downloadFullBackupBtn" class="btn btn-primary" type="button">Descargar backup completo</button></article>
-      <article class="panel"><span class="eyebrow">Datos tabulares</span><h3>Excel y CSV</h3><p>Volvé a Entrevistas, filtrá lo que necesites y seleccioná una, varias o todas. Podés descargarlo en Excel o CSV.</p><button id="goInterviewsBtn" class="btn btn-outline-secondary" type="button">Ir a entrevistas</button></article>
-      <article class="panel"><span class="eyebrow">Documento</span><h3>PDF</h3><p>Una entrevista se descarga como ficha completa. Varias entrevistas se exportan en un documento resumido y paginado.</p><button class="btn btn-outline-secondary" type="button" id="backupPdfHelpBtn" disabled>Usar desde Entrevistas</button></article>
+      <article class="panel"><span class="eyebrow">Respaldo completo</span><h3>Backup de la organización</h3><p>Descarga estudios, preguntas, encuestas, cobertura, usuarios, publicaciones, marca e historial en un único archivo JSON.</p><button id="downloadFullBackupBtn" class="btn btn-primary" type="button">Descargar backup completo</button></article>
+      <article class="panel"><span class="eyebrow">Datos tabulares</span><h3>Excel y CSV</h3><p>Volvé a Encuestas, filtrá lo que necesites y seleccioná una, varias o todas. Podés descargarlo en Excel o CSV.</p><button id="goInterviewsBtn" class="btn btn-outline-secondary" type="button">Ir a encuestas</button></article>
+      <article class="panel"><span class="eyebrow">Documento</span><h3>PDF</h3><p>Una encuesta se descarga como ficha completa. Varias encuestas se exportan en un documento resumido y paginado.</p><button class="btn btn-outline-secondary" type="button" id="backupPdfHelpBtn" disabled>Usar desde Encuestas</button></article>
     </div>
     <div class="method-alert mt-3"><strong>Recomendación:</strong> descargá un backup completo antes de una eliminación masiva o al cerrar cada temporada. Archivar un estudio conserva toda la información y es preferible a eliminarlo.</div>
   </div>
@@ -327,7 +327,7 @@
 <section id="view-users" class="app-view d-none">
   <div class="page-heading"><div><span class="eyebrow">Gobernanza</span><h2>Usuarios</h2><p>Agregá personas, cambiá sus permisos o quitá el acceso cuando lo necesites.</p></div><button id="addUserBtn" class="btn btn-primary">Agregar usuario</button></div>
   <div class="panel">
-    <div class="method-note mb-3"><strong>Roles simples:</strong> Administrador gestiona la plataforma; Analista consulta y trabaja con estudios; Encuestador registra entrevistas.</div>
+    <div class="method-note mb-3"><strong>Roles simples:</strong> Administrador gestiona la plataforma; Analista consulta y trabaja con estudios; Encuestador registra encuestas.</div>
     <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Destino</th><th>Estado</th><th class="text-end">Acciones</th></tr></thead><tbody id="usersTable"></tbody></table></div>
   </div>
 </section>
@@ -348,12 +348,12 @@
 
 <!-- SURVEY MODAL -->
 <div class="modal fade show-optional" id="surveyModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-scrollable"><form id="surveyForm" class="modal-content">
-  <div class="modal-header"><div><span class="eyebrow" id="surveyModeEyebrow">Entrevista</span><h3 class="modal-title" id="surveyModalTitle">Registrar visitante</h3></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+  <div class="modal-header"><div><span class="eyebrow" id="surveyModeEyebrow">Encuesta</span><h3 class="modal-title" id="surveyModalTitle">Registrar visitante</h3></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
   <div class="modal-body">
     <input type="hidden" id="surveyStartedAt">
     <div id="questionnaireEditBanner" class="edit-preview-banner d-none"><div><strong>Modo edición</strong><span>Este es el mismo cuestionario que usa el encuestador. Tocá <b>Editar</b> al lado de cualquier pregunta para modificarla.</span></div><button type="button" class="btn btn-sm btn-outline-secondary" id="previewAddQuestionBtn">+ Agregar pregunta</button></div>
     <div id="interviewerGuide" class="interviewer-guide"><div><strong>Es simple</strong><span>Leé cada pregunta y marcá lo que responda la persona. Si no sabe una respuesta opcional, dejala vacía.</span></div><button type="button" class="btn btn-sm btn-outline-secondary" id="surveyOptionalToggle">Ocultar preguntas opcionales</button></div>
-    <div id="surveyEditReasonWrap" class="edit-reason-banner d-none"><strong>Estás corrigiendo una entrevista ya guardada.</strong><label for="surveyEditReason">Motivo de la corrección *</label><textarea id="surveyEditReason" class="form-control" rows="2" placeholder="Ej. Cargué mal la provincia y la corregí después de revisar la entrevista."></textarea><small>El usuario, la fecha, la hora, el motivo y los valores anteriores quedan registrados en el historial.</small></div>
+    <div id="surveyEditReasonWrap" class="edit-reason-banner d-none"><strong>Estás corrigiendo una encuesta ya guardada.</strong><label for="surveyEditReason">Motivo de la corrección *</label><textarea id="surveyEditReason" class="form-control" rows="2" placeholder="Ej. Cargué mal la provincia y la corregí después de revisar la encuesta."></textarea><small>El usuario, la fecha, la hora, el motivo y los valores anteriores quedan registrados en el historial.</small></div>
     <ul class="nav nav-pills survey-tabs mb-4" id="surveyTabs" role="tablist">
       <li class="nav-item"><button class="nav-link active" type="button" data-bs-toggle="pill" data-bs-target="#survey-context">1. Quién es (Filtro y perfil)</button></li>
       <li class="nav-item"><button class="nav-link" type="button" data-bs-toggle="pill" data-bs-target="#survey-journey">2. Su viaje (Viaje y consumo)</button></li>
@@ -363,7 +363,7 @@
     </ul>
     <div class="tab-content">
       <div class="tab-pane fade show active" id="survey-context">
-        <div class="form-section"><h4>Dónde se hace la entrevista</h4><div class="row g-3">
+        <div class="form-section"><h4>Dónde se hace la encuesta</h4><div class="row g-3">
           <div class="col-md-4"><label class="form-label">Punto de relevamiento *</label><input id="surveyPoint" class="form-control" placeholder="Ej. Río Salado · Costanera" required></div>
           <div class="col-md-4"><label class="form-label">Franja *</label><select id="surveyTimeBand" class="form-select" required><option value="morning">Mañana</option><option value="afternoon">Tarde</option><option value="evening">Noche</option></select></div>
           <div class="col-md-4"><label class="form-label">Método de selección</label><select id="surveySelection" class="form-select"><option value="systematic">Sistemática (cada n°)</option><option value="quota">Cuota</option><option value="other">Otro</option></select></div>
@@ -426,18 +426,18 @@
       </div>
     </div>
   </div>
-  <div class="modal-footer"><span id="surveyMethodHint" class="me-auto small text-secondary"></span><span id="surveyProgressText" class="survey-progress-text">Paso 1 de 5</span><button type="button" class="btn btn-light" id="surveyPrevBtn">Anterior</button><button type="button" class="btn btn-outline-secondary" id="surveyNextBtn">Siguiente</button><button type="button" class="btn btn-light" data-bs-dismiss="modal" id="surveyCancelBtn">Cancelar</button><button class="btn btn-primary" id="surveySaveBtn">Guardar entrevista</button></div>
+  <div class="modal-footer"><span id="surveyMethodHint" class="me-auto small text-secondary"></span><span id="surveyProgressText" class="survey-progress-text">Paso 1 de 5</span><button type="button" class="btn btn-light" id="surveyPrevBtn">Anterior</button><button type="button" class="btn btn-outline-secondary" id="surveyNextBtn">Siguiente</button><button type="button" class="btn btn-light" data-bs-dismiss="modal" id="surveyCancelBtn">Cancelar</button><button class="btn btn-primary" id="surveySaveBtn">Guardar encuesta</button></div>
 </form></div></div>
 
 <!-- STUDY MODAL -->
 <div class="modal fade" id="studyModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><form id="studyForm"><input type="hidden" id="studyEditId"><div class="modal-header"><div><span class="eyebrow" id="studyModalEyebrow">Nuevo estudio</span><h3 class="modal-title" id="studyModalTitle">Preparar un relevamiento</h3></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div id="studyEditReasonWrap" class="edit-reason-banner d-none"><strong>Estás editando un estudio existente.</strong><label for="studyEditReason">Motivo del cambio *</label><textarea id="studyEditReason" class="form-control" rows="2" placeholder="Ej. Se amplió el período del relevamiento por decisión de la Secretaría."></textarea><small>El cambio quedará registrado con usuario, fecha, hora y valores anteriores.</small></div><div class="simple-modal-intro"><strong>Con pocos datos alcanza para empezar.</strong><span>La app ya deja configurado un método recomendado. Si alguien necesita modificar la metodología, puede abrir las opciones avanzadas.</span></div><div class="row g-3">
   <div class="col-md-6"><label class="form-label">Nombre del estudio *</label><input id="studyName" class="form-control" value="Demanda turística Santa Fe" required></div>
   <div class="col-md-6"><label class="form-label">Método *</label><select id="studyMethod" class="form-select"><option value="systematic_intercept">Interceptación sistemática</option><option value="stratified">Estratificado</option><option value="simple_random">Aleatorio simple</option><option value="quota">Cuotas</option><option value="convenience">Conveniencia</option><option value="open_link">Enlace abierto</option></select></div>
-  <div class="col-12"><label class="form-label">¿A quiénes queremos entrevistar? *</label><textarea id="studyUniverse" class="form-control" rows="2" required>Visitantes de 18 años o más presentes en Santa Fe y su área turística de influencia durante el período de estudio, excluyendo residentes habituales y viajeros recurrentes exclusivamente por trabajo/estudio cuando corresponda.</textarea></div>
+  <div class="col-12"><label class="form-label">¿A quiénes queremos encuestar? *</label><textarea id="studyUniverse" class="form-control" rows="2" required>Visitantes de 18 años o más presentes en Santa Fe y su área turística de influencia durante el período de estudio, excluyendo residentes habituales y viajeros recurrentes exclusivamente por trabajo/estudio cuando corresponda.</textarea></div>
   <div class="col-md-4"><label class="form-label">Población estimada</label><input id="studyPopulation" type="number" min="1" class="form-control"></div>
   <div class="col-md-4"><label class="form-label">Confianza</label><select id="studyConfidence" class="form-select"><option value="0.90">90%</option><option value="0.95" selected>95%</option><option value="0.99">99%</option></select></div>
   <div class="col-md-4"><label class="form-label">Margen objetivo</label><select id="studyMargin" class="form-select"><option value="0.03">±3%</option><option value="0.04" selected>±4%</option><option value="0.05">±5%</option></select></div>
-  <div class="col-md-4"><label class="form-label">¿Cuántas entrevistas queremos completar? *</label><input id="studyTarget" type="number" min="30" class="form-control" value="600" required></div>
+  <div class="col-md-4"><label class="form-label">¿Cuántas encuestas queremos completar? *</label><input id="studyTarget" type="number" min="30" class="form-control" value="600" required></div>
   <div class="col-md-4"><label class="form-label">Base mínima por subgrupo</label><input id="studyMinSubgroup" type="number" min="30" class="form-control" value="60"></div>
   <div class="col-md-4"><label class="form-label">Regla sistemática</label><input id="studyInterceptEvery" type="number" min="1" class="form-control" value="3"></div>
   <div class="col-md-6"><label class="form-label">Inicio *</label><input id="studyStart" type="date" class="form-control" required></div><div class="col-md-6"><label class="form-label">Fin *</label><input id="studyEnd" type="date" class="form-control" required></div>
@@ -480,7 +480,7 @@
 <div class="modal fade" id="eventModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="eventForm"><div class="modal-header"><h3 class="modal-title">Evento de campo</h3><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><label class="form-label">Resultado</label><select id="eventType" class="form-select mb-3"><option value="refused">Rechazo</option><option value="abandoned">Abandono</option><option value="not_eligible">No elegible</option></select><label class="form-label">Punto</label><input id="eventPoint" class="form-control mb-3" required><label class="form-label">Franja</label><select id="eventTimeBand" class="form-select"><option value="morning">Mañana</option><option value="afternoon">Tarde</option><option value="evening">Noche</option></select></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Guardar</button></div></form></div></div></div>
 
 <!-- COVERAGE MODAL -->
-<div class="modal fade" id="coverageModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="coverageForm"><div class="modal-header"><h3 class="modal-title">Meta de cobertura</h3><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><label class="form-label">Punto *</label><input id="coveragePoint" class="form-control mb-3" required><label class="form-label">Franja *</label><select id="coverageBand" class="form-select mb-3"><option value="morning">Mañana</option><option value="afternoon">Tarde</option><option value="evening">Noche</option><option value="all_day">Todo el día</option></select><label class="form-label">Objetivo de entrevistas *</label><input id="coverageTarget" type="number" min="1" class="form-control" value="100" required></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Guardar meta</button></div></form></div></div></div>
+<div class="modal fade" id="coverageModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="coverageForm"><div class="modal-header"><h3 class="modal-title">Meta de cobertura</h3><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><label class="form-label">Punto *</label><input id="coveragePoint" class="form-control mb-3" required><label class="form-label">Franja *</label><select id="coverageBand" class="form-select mb-3"><option value="morning">Mañana</option><option value="afternoon">Tarde</option><option value="evening">Noche</option><option value="all_day">Todo el día</option></select><label class="form-label">Objetivo de encuestas *</label><input id="coverageTarget" type="number" min="1" class="form-control" value="100" required></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Guardar meta</button></div></form></div></div></div>
 
 <!-- USER MODAL -->
 <div class="modal fade" id="userModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form id="userForm">
@@ -498,7 +498,7 @@
 
 
 <!-- INTERVIEW DETAIL -->
-<div class="modal fade" id="interviewDetailModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><div><span class="eyebrow">Entrevista guardada</span><h3 class="modal-title" id="interviewDetailTitle">Entrevista</h3></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body" id="interviewDetailBody"></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button><button id="detailPdfBtn" class="btn btn-outline-secondary" type="button" data-upper-only>Descargar PDF</button><button id="detailEditBtn" class="btn btn-primary" type="button">Editar</button></div></div></div></div>
+<div class="modal fade" id="interviewDetailModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><div><span class="eyebrow">Encuesta guardada</span><h3 class="modal-title" id="interviewDetailTitle">Encuesta</h3></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body" id="interviewDetailBody"></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button><button id="detailPdfBtn" class="btn btn-outline-secondary" type="button" data-upper-only>Descargar PDF</button><button id="detailEditBtn" class="btn btn-primary" type="button">Editar</button></div></div></div></div>
 
 <!-- DANGER DELETE -->
 <div class="modal fade" id="dangerDeleteModal" tabindex="-1" data-bs-backdrop="static"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><div><span class="eyebrow text-danger">Acción irreversible</span><h3 class="modal-title" id="dangerDeleteTitle">Eliminar definitivamente</h3></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input id="dangerDeleteKind" type="hidden"><p id="dangerDeleteText"></p><label class="form-label" for="dangerDeleteReason">Motivo *</label><textarea id="dangerDeleteReason" class="form-control mb-3" rows="3" placeholder="Explicá por qué se elimina esta información."></textarea><label class="form-label" for="dangerDeletePhrase">Para confirmar, escribí <strong>ELIMINAR</strong></label><input id="dangerDeletePhrase" class="form-control" autocomplete="off" placeholder="ELIMINAR"><div class="method-alert mt-3"><strong>Consejo:</strong> si sólo terminó una temporada, archivá el estudio en lugar de eliminarlo. Antes de una eliminación masiva, descargá un backup.</div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button id="dangerDeleteConfirmBtn" class="btn btn-danger" type="button" disabled>Eliminar definitivamente</button></div></div></div></div>

@@ -8,7 +8,7 @@ Los cuestionarios base, preguntas, opciones de respuesta, textos explicativos, m
 
 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es
 
-La licencia Creative Commons se limita a esos contenidos originales. No se extiende automáticamente a datos de usuarios, entrevistas, bases de datos, marcas, identidad visual, materiales de terceros ni contenidos creados o aportados por organizaciones usuarias.
+La licencia Creative Commons se limita a esos contenidos originales. No se extiende automáticamente a datos de usuarios, encuestas, bases de datos, marcas, identidad visual, materiales de terceros ni contenidos creados o aportados por organizaciones usuarias.
 
 ## Software propio
 

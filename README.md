@@ -1,6 +1,6 @@
 # Destintelligence V5.8 · Gestión, auditoría y backups
 
-Aplicación de inteligencia turística para equipos municipales. Mantiene la operación diaria simple, pero agrega una capa institucional de gestión: estudios, entrevistas, trazabilidad, exportaciones y respaldos.
+Aplicación de inteligencia turística para equipos municipales. Mantiene la operación diaria simple, pero agrega una capa institucional de gestión: estudios, encuestas, trazabilidad, exportaciones y respaldos.
 
 ## Supabase ya conectado
 
@@ -12,14 +12,9 @@ Aplicación de inteligencia turística para equipos municipales. Mantiene la ope
 
 La publishable key es pública y puede estar en el frontend. **Nunca coloques la `service_role` en GitHub, `config.js` ni ningún archivo del navegador.**
 
-## Si ya tenés V5.7 funcionando
+## Si ya tenés la base funcionando
 
-No reinstales la base.
-
-1. En **Supabase → SQL Editor**, ejecutá una vez `ACTUALIZAR-GESTION-AUDITORIA-V5.8.sql`.
-2. Volvé a desplegar `admin-users` para que la administración de usuarios también escriba en el historial.
-3. Reemplazá en GitHub los archivos anteriores por esta versión.
-4. Esperá el deploy de GitHub Pages y hacé `Ctrl + F5`.
+No reinstales la base. Reemplazá los archivos del sitio por esta versión y conservá la configuración actual de Supabase. La función `admin-users` se mantiene en `supabase/functions/admin-users/index.ts`.
 
 ## Si instalás desde cero
 
@@ -31,17 +26,17 @@ No hace falta ejecutar migraciones anteriores.
 
 ## Gestión de datos
 
-### Entrevistas / cuestionarios cargados
+### Encuestas / cuestionarios cargados
 
 Responsable principal, Administrador y Analista pueden:
 
-- abrir una entrevista individual;
+- abrir una encuesta individual;
 - editarla indicando obligatoriamente el motivo;
 - seleccionar una, varias, una página o todos los resultados filtrados;
 - exportar la selección en CSV, Excel o PDF;
 - eliminar definitivamente una selección mediante motivo + palabra `ELIMINAR`.
 
-El Encuestador dispone de **Mis entrevistas** y puede abrir y corregir únicamente registros creados por él. Toda corrección exige motivo y deja trazabilidad.
+El Encuestador dispone de **Mis encuestas** y puede abrir y corregir únicamente registros creados por él. Toda corrección exige motivo y deja trazabilidad.
 
 ### Estudios
 
@@ -49,7 +44,7 @@ Responsable principal, Administrador y Analista pueden:
 
 - editar metodología, nombre, período y parámetros;
 - archivar y reactivar;
-- ver sus entrevistas;
+- ver sus encuestas;
 - descargar un respaldo del estudio;
 - seleccionar varios estudios;
 - eliminar definitivamente con confirmación fuerte.
@@ -72,11 +67,11 @@ Registra, entre otros:
 - motivo;
 - información anterior y posterior.
 
-Incluye entrevistas, estudios, preguntas, usuarios, cobertura, eventos de campo, marca, publicaciones, exportaciones y backups.
+Incluye encuestas, estudios, preguntas, usuarios, cobertura, eventos de campo, marca, publicaciones, exportaciones y backups.
 
 ### Backups
 
-**Backup completo** descarga un JSON con la información de la organización: estudios, preguntas, entrevistas, eventos, cobertura, usuarios, marca, publicaciones e historial.
+**Backup completo** descarga un JSON con la información de la organización: estudios, preguntas, encuestas, eventos, cobertura, usuarios, marca, publicaciones e historial.
 
 Recomendación: hacer un backup al cerrar una temporada y antes de cualquier eliminación masiva.
 
@@ -106,8 +101,8 @@ En **Supabase → Authentication → URL Configuration** usá:
 ## Exportaciones
 
 - **CSV:** preparado para abrir correctamente en Excel con configuración regional que usa `;` como separador.
-- **Excel:** hoja de entrevistas + hoja de información del exportable.
-- **PDF:** ficha detallada para una entrevista y documento tabular paginado para múltiples entrevistas.
+- **Excel:** hoja de encuestas + hoja de información del exportable.
+- **PDF:** ficha detallada para una encuesta y documento tabular paginado para múltiples encuestas.
 - **JSON:** estudios y backups completos.
 
 Las librerías de Excel/PDF se cargan desde CDN; si no estuvieran disponibles, la app conserva alternativas de exportación cuando es posible.
@@ -118,6 +113,6 @@ Destintelligence separa los derechos sobre sus contenidos metodológicos del sof
 
 - **Cuestionarios, textos, metodología y documentación originales:** CC BY-NC-SA 4.0.
 - **Código fuente, scripts, estilos, configuración y componentes propios:** © 2026 Sebastián E. Portillo. Todos los derechos reservados.
-- **Datos, entrevistas, contenidos de organizaciones usuarias, marcas y materiales de terceros:** excluidos de la licencia Creative Commons salvo que corresponda otra licencia específica.
+- **Datos, encuestas, contenidos de organizaciones usuarias, marcas y materiales de terceros:** excluidos de la licencia Creative Commons salvo que corresponda otra licencia específica.
 
 Ver `licencia.html`, `LICENSE.md` y `THIRD-PARTY-NOTICES.md` para el alcance completo.

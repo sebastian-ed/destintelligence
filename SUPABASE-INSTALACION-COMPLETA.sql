@@ -747,12 +747,12 @@ drop trigger if exists trg_audit_questions on public.survey_questions;
 create trigger trg_audit_questions after insert or update or delete on public.survey_questions
 for each row execute function public.audit_destintelligence_change('question');
 
--- Entrevistas: las correcciones quedan registradas con usuario, hora, antes/después y motivo.
+-- Encuestas: las correcciones quedan registradas con usuario, hora, antes/después y motivo.
 drop trigger if exists trg_audit_visitors_update on public.visitor_records;
 create trigger trg_audit_visitors_update after insert or update on public.visitor_records
 for each row execute function public.audit_destintelligence_change('interview');
 
--- Permitir correcciones. El Encuestador sólo puede corregir entrevistas propias y debe enviar motivo.
+-- Permitir correcciones. El Encuestador sólo puede corregir encuestas propias y debe enviar motivo.
 drop policy if exists visitor_update on public.visitor_records;
 create policy visitor_update on public.visitor_records for update to authenticated
 using(
@@ -814,14 +814,14 @@ declare
 begin
  if p_confirmation <> 'ELIMINAR' then raise exception 'Confirmación incorrecta'; end if;
  if nullif(btrim(coalesce(p_reason,'')),'') is null then raise exception 'Debés indicar el motivo'; end if;
- if coalesce(array_length(p_ids,1),0)=0 then raise exception 'No seleccionaste entrevistas'; end if;
+ if coalesce(array_length(p_ids,1),0)=0 then raise exception 'No seleccionaste encuestas'; end if;
  select organization_id,destination_id,study_id into v_org,v_dest,v_study from public.visitor_records where id=any(p_ids) limit 1;
  if v_org is null then return 0; end if;
  v_role:=public.current_role(v_org);
- if v_role not in ('owner','admin','analyst') then raise exception 'No tenés permiso para eliminar entrevistas'; end if;
+ if v_role not in ('owner','admin','analyst') then raise exception 'No tenés permiso para eliminar encuestas'; end if;
  select email into v_email from auth.users where id=v_uid;
  select count(*) into v_count from public.visitor_records where id=any(p_ids) and organization_id=v_org;
- -- Guardar una fotografía de cada entrevista antes de borrarla.
+ -- Guardar una fotografía de cada encuesta antes de borrarla.
  insert into public.audit_logs(organization_id,destination_id,study_id,actor_user_id,actor_email,entity_type,entity_id,action,reason,before_data,metadata)
  select r.organization_id,r.destination_id,r.study_id,v_uid,v_email,'interview',r.id::text,'delete',p_reason,to_jsonb(r),jsonb_build_object('bulk',true)
  from public.visitor_records r where r.id=any(p_ids) and r.organization_id=v_org;
